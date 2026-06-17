@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinEngine | المنصة الذكية للتحليل المالي</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
+        body { font-family: 'Tajawal', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-reverse space-x-3">
+                <div class="bg-blue-600 text-white p-2 rounded-lg font-bold text-xl">
+                    <i class="fa-solid fa-chart-pie"></i>
+                </div>
+                <span class="text-xl font-bold text-gray-900 tracking-wide">FinEngine</span>
+            </div>
+            
+            <nav class="hidden md:flex space-x-reverse space-x-8 font-medium">
+                <a href="#about" class="text-gray-600 hover:text-blue-600 transition">من نحن</a>
+                <a href="#features" class="text-gray-600 hover:text-blue-600 transition">المميزات</a>
+                <a href="#security" class="text-gray-600 hover:text-blue-600 transition">أمن البيانات</a>
+            </nav>
+
+            <div class="flex items-center space-x-reverse space-x-4">
+                <button onclick="openModal('login')" class="text-gray-700 hover:text-blue-600 font-medium transition cursor-pointer">تسجيل الدخول</button>
+                <button onclick="openModal('register')" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg font-medium shadow-md hover:shadow-lg transition cursor-pointer">ابدأ مجاناً</button>
+            </div>
+        </div>
+    </header>
+
+    <section class="container mx-auto px-6 py-20 text-center md:text-right md:flex md:items-center md:justify-between">
+        <div class="md:w-1/2 space-y-6">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-950 leading-tight">
+                حوّل ميزان المراجعة إلى <span class="text-blue-600">قوائم مالية معتمدة</span> في ثوانٍ!
+            </h1>
+            <p class="text-lg text-gray-600 leading-relaxed">
+                منصة رقمية متقدمة تعمل بالذكاء الاصطناعي لتصنيف حسابات شركتك وتوليد القوائم المالية وفق معايير IFRS الدولية وحساب الزكاة الشرعية بدقة متناهية.
+            </p>
+            <div class="pt-4 flex flex-col sm:flex-row justify-center md:justify-start gap-4">
+                <button onclick="openModal('register')" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-8 py-3.5 rounded-xl shadow-lg transition text-center cursor-pointer">
+                    <i class="fa-solid fa-cloud-arrow-up ml-2"></i> ارفع ميزان المراجعة الآن
+                </button>
+                <a href="#about" class="border border-gray-300 hover:bg-gray-100 text-gray-700 font-medium px-8 py-3.5 rounded-xl transition text-center">
+                    اكتشف المزيد
+                </a>
+            </div>
+        </div>
+        <div class="md:w-1/2 mt-12 md:mt-0 flex justify-center">
+            <div class="relative w-4/5 max-w-md">
+                <div class="absolute top-0 -left-4 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
+                <div class="absolute -bottom-8 right-4 w-72 h-72 bg-teal-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
+                <div class="relative bg-white p-6 rounded-2xl shadow-2xl border border-gray-100">
+                    <div class="flex justify-between items-center border-b pb-4 mb-4">
+                        <span class="font-bold text-gray-900">لوحة التحليل المالي التنفيذي</span>
+                        <span class="bg-green-100 text-green-800 text-xs px-2.5 py-1 rounded-full font-medium">ميزانية متزنة <i class="fa-solid fa-check"></i></span>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="h-4 bg-gray-200 rounded w-3/4"></div>
+                        <div class="h-8 bg-blue-100 rounded w-full flex items-center px-3 text-blue-800 font-bold text-sm">صافي الربح بعد الزكاة: 243,750 ريال</div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div class="h-12 bg-gray-100 rounded p-2 text-center text-xs text-gray-500">نسبة التداول<br><span class="font-bold text-gray-800">2.1</span></div>
+                            <div class="h-12 bg-gray-100 rounded p-2 text-center text-xs text-gray-500">العائد للأصول<br><span class="font-bold text-gray-800">14%</span></div>
+                            <div class="h-12 bg-gray-100 rounded p-2 text-center text-xs text-gray-500">هامش الربح<br><span class="font-bold text-gray-800">32%</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="bg-white py-20 border-y border-gray-100">
+        <div class="container mx-auto px-6 max-w-4xl text-center space-y-6">
+            <h2 class="text-3xl font-bold text-gray-900">فكرة المنصة ورؤيتنا</h2>
+            <p class="text-lg text-gray-600 leading-relaxed">
+                تأسست **FinEngine** لسد الفجوة بين المحاسبة التقليدية والتحليل المالي الذكي. المنصة لا تتطلب أي إعدادات معقدة؛ كل ما عليك فعله هو تصدير ميزان المراجعة من أي نظام محاسبي (مثل Xero، QuickBooks، أو قيود) ورفعه هنا. يقوم محركنا الذكي بفرز الحسابات وتوليد ميزانية عمومية وقائمة دخل فورية مدعومة بمؤشرات الأداء الرسومية.
+            </p>
+        </div>
+    </section>
+
+    <section id="features" class="container mx-auto px-6 py-20">
+        <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">لماذا يختارنا المحاسبون والمدراء التنفيذيون؟</h2>
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition space-y-4">
+                <div class="text-blue-600 text-3xl"><i class="fa-solid fa-bolt"></i></div>
+                <h3 class="text-xl font-bold text-gray-900">سرعة معالجة فائقة</h3>
+                <p class="text-gray-600">ودّع جداول Excel المعقدة وساعات المطابقة اليدوية. احصل على تقاريرك المالية الشاملة في أقل من دقيقة واحدة.</p>
+            </div>
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition space-y-4">
+                <div class="text-blue-600 text-3xl"><i class="fa-solid fa-calculator"></i></div>
+                <h3 class="text-xl font-bold text-gray-900">دعم الزكاة والـ IFRS</h3>
+                <p class="text-gray-600">محرك حسابي دقيق يطبق المعايير الدولية لإعداد التقارير المالية مع حساب فوري لمخصص الزكاة الشرعية بنسبة 2.5%.</p>
+            </div>
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition space-y-4">
+                <div class="text-blue-600 text-3xl"><i class="fa-solid fa-chart-line"></i></div>
+                <h3 class="text-xl font-bold text-gray-900">تحليلات ورسوم تنفيذية</h3>
+                <p class="text-gray-600">لا نمنحك أرقاماً صامتة فحسب؛ نوفر لك رسومات بيانية ذكية ونسباً مالية (مثل ROA ونسب التداول) لقراءة أداء عملك بوضوح.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="security" class="bg-gradient-to-br from-gray-900 to-blue-950 text-white py-20 rounded-t-[3rem]">
+        <div class="container mx-auto px-6 md:flex md:items-center md:justify-between gap-12">
+            <div class="md:w-1/2 space-y-6">
+                <div class="bg-blue-500/10 text-blue-400 border border-blue-500/20 px-4 py-1 rounded-full text-sm inline-block font-medium">
+                    <i class="fa-solid fa-shield-halved ml-1"></i> أمن البيانات والسرية المطلقة
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold">أسرار بياناتك المالية في أيدٍ أمينة</h2>
+                <p class="text-gray-300 leading-relaxed">
+                    نحن في **FinEngine** نضع سرية وأمن معلومات الشركات على رأس أولوياتنا. نلتزم باتفاقيات عدم الإفصاح الصارمة (NDA)، ويتم تشفير كافة البيانات المرفوعة عبر بروتوكولات **AES-256** قبل معالجتها.
+                </p>
+                <ul class="space-y-3 text-gray-300">
+                    <li><i class="fa-solid fa-circle-check text-green-400 ml-2"></i> لا يتم بيع أو مشاركة بيانات موازين المراجعة مع أي طرف ثالث.</li>
+                    <li><i class="fa-solid fa-circle-check text-green-400 ml-2"></i> إمكانية مسح البيانات نهائياً من خوادمنا بمجرد إغلاق الجلسة وتصدير ملفك.</li>
+                    <li><i class="fa-solid fa-circle-check text-green-400 ml-2"></i> خوادم سحابية آمنة ومحمية بجدران حماية بنكية.</li>
+                </ul>
+            </div>
+            <div class="md:w-1/2 mt-10 md:mt-0 flex justify-center">
+                <i class="fa-solid fa-user-shield text-[10rem] text-blue-500/20 animate-pulse"></i>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-gray-950 text-gray-500 py-8 text-center text-sm border-t border-gray-900">
+        <p>&copy; 2026 FinEngine. جميع الحقوق محفوظة. المنصة تخضع لأعلى معايير الحماية وتشفير البيانات.</p>
+    </footer>
+
+    <div id="authModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 relative border border-gray-100">
+            <button onclick="closeModal()" class="absolute top-4 left-4 text-gray-400 hover:text-gray-600 text-xl cursor-pointer">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            
+            <div id="loginContent" class="space-y-5 hidden">
+                <h3 class="text-2xl font-bold text-gray-900 text-center">تسجيل الدخول للنظام</h3>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">البريد الإلكتروني</label>
+                        <input type="email" placeholder="name@company.com" class="w-full px-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">كلمة المرور</label>
+                        <input type="password" placeholder="••••••••" class="w-full px-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    </div>
+                    <button onclick="navigateToApp()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-xl shadow-md transition cursor-pointer">دخول</button>
+                </div>
+            </div>
+
+            <div id="registerContent" class="space-y-5 hidden">
+                <h3 class="text-2xl font-bold text-gray-900 text-center">إنشاء حساب جديد</h3>
+                <p class="text-sm text-gray-500 text-center">يرجى التسجيل ببريدك الإلكتروني لتفعيل حسابك ومباشرة العمل.</p>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">اسم الشركة / المستخدم</label>
+                        <input type="text" placeholder="شركة الحلول المالية" class="w-full px-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">البريد الإلكتروني</label>
+                        <input id="regEmail" type="email" placeholder="ceo@company.com" class="w-full px-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">كلمة المرور</label>
+                        <input type="password" placeholder="••••••••" class="w-full px-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    </div>
+                    <button onclick="triggerEmailVerification()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-xl shadow-md transition cursor-pointer">إنشاء الحساب</button>
+                </div>
+            </div>
+
+            <div id="activationContent" class="space-y-5 hidden text-center py-4">
+                <div class="text-amber-500 text-5xl"><i class="fa-solid fa-envelope-circle-check"></i></div>
+                <h3 class="text-2xl font-bold text-gray-900">تأكيد الحساب مطلوب</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">
+                    لقد أرسلنا رابط تفعيل إلى البريد الإلكتروني <br><span id="targetEmail" class="font-bold text-blue-600"></span>.<br>
+                    يرجى النقر على زر المحاكاة أدناه لتأكيد التفعيل والدخول للصفحة الرئيسية للرفع.
+                </p>
+                <div class="pt-4 border-t space-y-3">
+                    <button onclick="simulateVerificationSuccess()" class="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 rounded-xl shadow-md transition cursor-pointer">
+                        محاكاة فتح الرابط من الإيميل <i class="fa-solid fa-arrow-up-right-from-square mr-1 text-sm"></i>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('authModal');
+        const loginContent = document.getElementById('loginContent');
+        const registerContent = document.getElementById('registerContent');
+        const activationContent = document.getElementById('activationContent');
+
+        function openModal(type) {
+            modal.classList.remove('hidden');
+            if (type === 'login') {
+                loginContent.classList.remove('hidden');
+                registerContent.classList.add('hidden');
+                activationContent.classList.add('hidden');
+            } else {
+                registerContent.classList.remove('hidden');
+                loginContent.classList.add('hidden');
+                activationContent.classList.add('hidden');
+            }
+        }
+
+        function closeModal() {
+            modal.classList.add('hidden');
+        }
+
+        // عند قيام المستخدم بالضغط على إنشاء حساب
+        function triggerEmailVerification() {
+            const emailInput = document.getElementById('regEmail').value;
+            if (!emailInput) {
+                alert("يرجى إدخال البريد الإلكتروني");
+                return;
+            }
+            // إظهار واجهة التحقق وحجب واجهة التسجيل المبدئي
+            registerContent.classList.add('hidden');
+            document.getElementById('targetEmail').textContent = emailInput;
+            activationContent.classList.remove('hidden');
+        }
+
+        // محاكاة تأكيد الحساب بنجاح عبر البريد الإلكتروني
+        function simulateVerificationSuccess() {
+            alert("تم تأكيد بريدك الإلكتروني بنجاح! سيتم تحويلك الآن إلى الصفحة الرئيسية لرفع ميزان المراجعة.");
+            navigateToApp();
+        }
+
+        // دالة الانتقال الفعلي لتطبيق معالجة موازين المراجعة (الصفحة الحالية لك)
+        function navigateToApp() {
+            // قم بتغيير 'app.html' إلى اسم ملف الصفحة الرئيسية الخاصة بك لرفع ميزان المراجعة والبدء بالخطوات
+            window.location.href = 'app.html'; 
+        }
+    </script>
+</body>
+</html>
