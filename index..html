@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>النظام المالي الذكي</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        body {
+            background: #f7f7f7;
+            font-family: "Tajawal", sans-serif;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px #0001;
+        }
+    </style>
+</head>
+
+<body class="p-6">
+
+    <h1 class="text-3xl font-bold text-center mb-6 text-slate-800">
+        النظام المالي الذكي – توليد القوائم المالية
+    </h1>
+
+    <div id="msg-box" class="text-center text-lg font-semibold mb-4 text-green-600"></div>
+
+    <div class="text-center mb-6">
+        <button onclick="generateFinancialStatements()"
+                class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+            توليد القوائم المالية
+        </button>
+    </div>
+
+    <div id="statements-section" class="hidden space-y-10 max-w-4xl mx-auto">
+
+        <div class="card">
+            <h2 class="text-2xl font-bold mb-4 text-slate-700">قائمة الدخل</h2>
+
+            <div class="space-y-2">
+                <div class="flex justify-between">
+                    <span>الإيرادات</span>
+                    <span id="inc-revenue">0</span>
+                </div>
+
+                <div class="flex justify-between">
+                    <span>تكلفة المبيعات</span>
+                    <span id="inc-cogs">0</span>
+                </div>
+
+                <div class="flex justify-between font-semibold text-blue-700">
+                    <span>مجمل الربح</span>
+                    <span id="inc-gross">0</span>
+                </div>
+
+                <hr class="my-3">
+
+                <h3 class="font-bold text-slate-700">المصروفات التشغيلية</h3>
+                <table class="w-full mt-2 mb-2">
+                    <tbody id="inc-expenses-list">
+                        <tr class="flex justify-between"><td>مصاريف إدارية</td><td>15,000</td></tr>
+                        <tr class="flex justify-between"><td>مصاريف تسويق</td><td>5,000</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="flex justify-between font-semibold">
+                    <span>إجمالي المصروفات</span>
+                    <span id="inc-exp-total">20,000</span>
+                </div>
+
+                <hr class="my-3">
+
+                <div class="flex justify-between text-green-700 font-bold text-lg">
+                    <span>صافي الربح</span>
+                    <span id="inc-net">0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="text-2xl font-bold mb-4 text-slate-700">الميزانية العمومية</h2>
+
+            <h3 class="font-bold text-slate-700">الأصول المتداولة</h3>
+            <div class="space-y-2 mt-2">
+                <div class="flex justify-between"><span>النقدية</span><span id="bs-cash">0</span></div>
+                <div class="flex justify-between"><span>الذمم المدينة</span><span id="bs-receivables">0</span></div>
+                <div class="flex justify-between"><span>المخزون</span><span id="bs-inventory">0</span></div>
+                <div class="flex justify-between font-semibold"><span>إجمالي الأصول المتداولة</span><span id="bs-current-assets">0</span></div>
+            </div>
+
+            <hr class="my-3">
+
+            <h3 class="font-bold text-slate-700">الأصول غير المتداولة</h3>
+            <div class="flex justify-between mt-2">
+                <span>الأصول الثابتة الصافية</span>
+                <span id="bs-fixed-net">0</span>
+            </div>
+
+            <div class="flex justify-between font-bold text-blue-700 mt-3">
+                <span>إجمالي الأصول</span>
+                <span id="bs-total-assets">0</span>
+            </div>
+
+            <hr class="my-3">
+
+            <h3 class="font-bold text-slate-700">الخصوم</h3>
+            <div class="space-y-2 mt-2">
+                <div class="flex justify-between"><span>الخصوم المتداولة</span><span id="bs-current-liab">0</span></div>
+                <div class="flex justify-between"><span>الخصوم طويلة الأجل</span><span id="bs-noncurrent-liab">0</span></div>
+                <div class="flex justify-between font-semibold"><span>إجمالي الخصوم</span><span id="bs-total-liab">0</span></div>
+            </div>
+
+            <hr class="my-3">
+
+            <div class="flex justify-between font-bold text-green-700 text-lg">
+                <span>حقوق الملكية</span>
+                <span id="bs-equity">0</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="text-2xl font-bold mb-4 text-slate-700">النسب المالية</h2>
+
+            <div class="space-y-2">
+                <div class="flex justify-between"><span>نسبة السيولة</span><span id="ratio-current">0</span></div>
+                <div class="flex justify-between"><span>نسبة المديونية</span><span id="ratio-debt">0%</span></div>
+                <div class="flex justify-between"><span>العائد على الأصول</span><span id="ratio-roa">0%</span></div>
+                <div class="flex justify-between"><span>هامش صافي الربح</span><span id="ratio-netmargin">0%</span></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function generateFinancialStatements() {
+            // إظهار قسم القوائم المالية
+            document.getElementById('statements-section').classList.remove('hidden');
+            document.getElementById('msg-box').innerText = "تمت معالجة وتوليد البيانات المالية بنجاح!";
+
+            // حسابات أرقام تجريبية لملء الفراغات والعمليات الحسابية
+            let revenue = 150000;
+            let cogs = 60000;
+            let grossProfit = revenue - cogs;
+            let totalExpenses = 20000;
+            let netProfit = grossProfit - totalExpenses;
+
+            // إدخال بيانات قائمة الدخل
+            document.getElementById('inc-revenue').innerText = revenue.toLocaleString() + " ر.س";
+            document.getElementById('inc-cogs').innerText = cogs.toLocaleString() + " ر.س";
+            document.getElementById('inc-gross').innerText = grossProfit.toLocaleString() + " ر.س";
+            document.getElementById('inc-net').innerText = netProfit.toLocaleString() + " ر.س";
+
+            // بيانات الميزانية العمومية
+            let cash = 50000;
+            let receivables = 30000;
+            let inventory = 20000;
+            let currentAssets = cash + receivables + inventory;
+            let fixedAssets = 100000;
+            let totalAssets = currentAssets + fixedAssets;
+
+            let currentLiab = 25000;
+            let longLiab = 35000;
+            let totalLiab = currentLiab + longLiab;
+            let equity = totalAssets - totalLiab;
+
+            document.getElementById('bs-cash').innerText = cash.toLocaleString() + " ر.س";
+            document.getElementById('bs-receivables').innerText = receivables.toLocaleString() + " ر.س";
+            document.getElementById('bs-inventory').innerText = inventory.toLocaleString() + " ر.س";
+            document.getElementById('bs-current-assets').innerText = currentAssets.toLocaleString() + " ر.س";
+            document.getElementById('bs-fixed-net').innerText = fixedAssets.toLocaleString() + " ر.س";
+            document.getElementById('bs-total-assets').innerText = totalAssets.toLocaleString() + " ر.س";
+            document.getElementById('bs-current-liab').innerText = currentLiab.toLocaleString() + " ر.س";
+            document.getElementById('bs-noncurrent-liab').innerText = longLiab.toLocaleString() + " ر.س";
+            document.getElementById('bs-total-liab').innerText = totalLiab.toLocaleString() + " ر.س";
+            document.getElementById('bs-equity').innerText = equity.toLocaleString() + " ر.س";
+
+            // حساب النسب المالية الأساسية
+            let currentRatio = (currentAssets / currentLiab).toFixed(2);
+            let debtRatio = ((totalLiab / totalAssets) * 100).toFixed(1) + "%";
+            let roa = ((netProfit / totalAssets) * 100).toFixed(1) + "%";
+            let netMargin = ((netProfit / revenue) * 100).toFixed(1) + "%";
+
+            document.getElementById('ratio-current').innerText = currentRatio;
+            document.getElementById('ratio-debt').innerText = debtRatio;
+            document.getElementById('ratio-roa').innerText = roa;
+            document.getElementById('ratio-netmargin').innerText = netMargin;
+        }
+    </script>
+</body>
+</html>
