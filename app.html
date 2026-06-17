@@ -1,81 +1,235 @@
-import { financialModel } from "./models/financialModel.js";
-import { classifyAccount } from "./financial-engine/classify.js";
-import { computeIncome } from "./financial-engine/computeIncome.js";
-import { computeBalance } from "./financial-engine/computeBalance.js";
-import { computeRatios } from "./financial-engine/computeRatios.js";
-import { validateModel } from "./financial-engine/validate.js";
+// ==========================================
+// 1. هيكل النموذج المالي القياسي (financialModel)
+// ==========================================
+const financialModelSchema = {
+    income: {
+        revenue: 0,
+        cogs: 0,
+        grossProfit: 0,
+        expenses: {
+            operating: 0,    // مصاريف عمومية وإدارية وتسويقية
+            depreciation: 0, // الإهلاك والاستهلاك
+            finance: 0       // تكاليف التمويل والقروض
+        },
+        totalExpenses: 0,
+        netBeforeZakat: 0,
+        zakat: 0,
+        tax: 0,
+        netAfterZakat: 0
+    },
+    assets: {
+        current: {
+            cash: 0,
+            receivables: 0,
+            inventory: 0,
+            total: 0
+        },
+        nonCurrent: {
+            fixedNet: 0,
+            total: 0
+        },
+        totalAssets: 0
+    },
+    liabilities: {
+        current: {
+            payables: 0,
+            shortTermLoans: 0,
+            zakatProvision: 0,
+            total: 0
+        },
+        nonCurrent: {
+            longTermLoans: 0,
+            total: 0
+        },
+        totalLiabilities: 0
+    },
+    equity: {
+        capital: 0,
+        retainedEarnings: 0, // الأرباح المبقاة
+        total: 0
+    },
+    ratios: {
+        currentRatio: 0,
+        debtRatio: 0,
+        roa: 0,
+        netMargin: 0
+    }
+};
 
+// ==========================================
+// 2. المحرك المالي والعمليات الحسابية (Pure Functions)
+// ==========================================
+
+// دالة تصنيف الحسابات ديناميكياً
+function classifyAccount(account, category, model) {
+    const amount = Number(account.balance || 0);
+    
+    switch (category) {
+        case 'revenue': model.income.revenue += amount; break;
+        case 'cogs': model.income.cogs += amount; break;
+        case 'operating_expenses': model.income.expenses.operating += amount; break;
+        case 'depreciation': model.income.expenses.depreciation += amount; break;
+        case 'finance_costs': model.income.expenses.finance += amount; break;
+        
+        case 'cash': model.assets.current.cash += amount; break;
+        case 'receivables': model.assets.current.receivables += amount; break;
+        case 'inventory': model.assets.current.inventory += amount; break;
+        case 'fixed_assets': model.assets.nonCurrent.fixedNet += amount; break;
+        
+        case 'payables': model.liabilities.current.payables += amount; break;
+        case 'short_loans': model.liabilities.current.shortTermLoans += amount; break;
+        case 'long_loans': model.liabilities.nonCurrent.longTermLoans += amount; break;
+        
+        case 'capital': model.equity.capital += amount; break;
+        case 'retained_earnings': model.equity.retainedEarnings += amount; break;
+    }
+}
+
+// دالة حساب قائمة الدخل والزكاة الشرعية
+function computeIncome(model) {
+    const inc = model.income;
+    inc.grossProfit = inc.revenue - inc.cogs;
+    inc.totalExpenses = Object.values(inc.expenses).reduce((sum, val) => sum + val, 0);
+    inc.netBeforeZakat = inc.grossProfit - inc.totalExpenses;
+    
+    // احتساب الزكاة الشرعية التقديرية 2.5% في حال وجود أرباح
+    inc.zakat = inc.netBeforeZakat > 0 ? inc.netBeforeZakat * 0.025 : 0;
+    inc.netAfterZakat = inc.netBeforeZakat - inc.zakat;
+    
+    // ترحيل صافي الربح التلقائي للأرباح المبقاة لضمان اتزان الميزانية
+    model.equity.retainedEarnings += inc.netAfterZakat;
+}
+
+// دالة حساب الميزانية العمومية والالتزامات
+function computeBalance(model) {
+    // حساب الأصول
+    const ast = model.assets;
+    ast.current.total = ast.current.cash + ast.current.receivables + ast.current.inventory;
+    ast.nonCurrent.total = ast.nonCurrent.fixedNet;
+    ast.totalAssets = ast.current.total + ast.nonCurrent.total;
+
+    // ترحيل الزكاة كمخصص في الالتزامات المتداولة
+    model.liabilities.current.zakatProvision = model.income.zakat;
+
+    // حساب الالتزامات
+    const liab = model.liabilities;
+    liab.current.total = liab.current.payables + liab.current.shortTermLoans + liab.current.zakatProvision;
+    liab.nonCurrent.total = liab.nonCurrent.longTermLoans;
+    liab.totalLiabilities = liab.current.total + liab.nonCurrent.total;
+
+    // حساب حقوق الملكية الإجمالية
+    model.equity.total = model.equity.capital + model.equity.retainedEarnings;
+}
+
+// دالة حساب المؤشرات والنسب المادية التنفيذية
+function computeRatios(model) {
+    const rat = model.ratios;
+    const totalAssets = model.assets.totalAssets || 1;
+    const currentLiabilities = model.liabilities.current.total || 1;
+    const revenue = model.income.revenue || 1;
+
+    rat.currentRatio = model.assets.current.total / currentLiabilities;
+    rat.debtRatio = model.liabilities.totalLiabilities / totalAssets;
+    rat.roa = model.income.netAfterZakat / totalAssets;
+    rat.netMargin = model.income.netAfterZakat / revenue;
+}
+
+// دالة فحص اتزان الميزانية ومعايير IFRS الصارمة
+function validateModel(model) {
+    const errors = [];
+    const totalEquitiesAndLiabilities = model.totalLiabilitiesAndEquity;
+    const diff = Math.abs(model.assets.totalAssets - totalEquitiesAndLiabilities);
+    
+    // إذا تخطى الفارق الحسابي 0.1 ريال (نتيجة تقريب الهلالات) يتم التنبيه فوراً
+    if (diff > 0.1) {
+        errors.push(`الميزانية غير متزنة رقمياً! الفارق: ${diff.toFixed(2)} ريال. (إجمالي الأصول: ${model.assets.totalAssets.toFixed(2)} مقابل الخصوم وحقوق الملكية: ${totalEquitiesAndLiabilities.toFixed(2)})`);
+    }
+    if (model.income.revenue < 0) {
+        errors.push("خطأ مالي منطقي: قيمة الإيرادات مسجلة بالسالب.");
+    }
+    return errors;
+}
+
+// ==========================================
+// 3. الدالة الرئيسية وإدارة الواجهات (Main Process)
+// ==========================================
 export async function generateFinancialStatements() {
-
-    if (trialBalanceProcessed.length === 0) {
-        showUIMessage("لا توجد بيانات", "يرجى رفع ميزان المراجعة أو تجربة أحد الديموهات", "danger");
+    
+    // التحقق الأمني الأولي من وجود ميزان مراجعة مرفوع
+    if (!window.trialBalanceProcessed || window.trialBalanceProcessed.length === 0) {
+        showUIMessage("لا توجد بيانات", "يرجى رفع ميزان المراجعة أو تجربة أحد الديموهات أولاً", "danger");
         return;
     }
 
     try {
-        showUIMessage("جاري المعالجة...", "يتم حساب القوائم المالية وفق معايير IFRS مع دعم الزكاة...", "success");
+        showUIMessage("جاري المعالجة الرقمية...", "يتم فرز الحسابات وفق معايير IFRS الدولية وحساب مخصص الزكاة...", "success");
 
-        // إنشاء نسخة جديدة من النموذج
-        const model = structuredClone(financialModel);
+        // استنساخ عميق ومعزول لمنع تلوث أو تداخل البيانات بين العمليات
+        const model = structuredClone(financialModelSchema);
 
-        // تصنيف الحسابات
-        trialBalanceProcessed.forEach((acc, i) => {
-            const select = document.getElementById(`map-acc-${i}`);
-            const category = select ? select.value : "operating_expenses";
+        // قراءة الاختيارات والمابينج من الواجهة لكل حساب وتصنيفه داخل النموذج
+        window.trialBalanceProcessed.forEach((acc, i) => {
+            const selectElement = document.getElementById(`map-acc-${i}`);
+            const category = selectElement ? selectElement.value : "operating_expenses";
             classifyAccount(acc, category, model);
         });
 
-        // حساب قائمة الدخل
+        // تشغيل المحرك المالي المتتابع بالترتيب الرياضي الصحيح
         computeIncome(model);
-
-        // حساب الميزانية
         computeBalance(model);
-
-        // حساب النسب
         computeRatios(model);
 
-        // التحقق من الأخطاء
-        const errors = validateModel(model);
-        if (errors.length > 0) {
-            showUIMessage("خطأ", errors.join(" — "), "danger");
+        // دمج متغيرات المجاميع المكررة لتخفيف العمليات وسهولة القراءة
+        model.totalLiabilitiesAndEquity = model.liabilities.totalLiabilities + model.equity.total;
+
+        // مراجعة وفحص سلامة الميزانية قبل العرض والتصدير
+        const validationErrors = validateModel(model);
+        if (validationErrors.length > 0) {
+            showUIMessage("فشل التدقيق المالي", validationErrors.join(" — "), "danger");
             return;
         }
 
-        // ربط النتائج مع دوال الواجهة الحالية
+        // ----------------------------------------
+        // ربط وتغذية جداول الواجهة الحالية بالأرقام النظيفة
+        // ----------------------------------------
+        
+        // 1. قائمة الدخل
         fillIncomeStatement({
             revenue: model.income.revenue,
             cogs: model.income.cogs,
-            grossProfit: model.income.revenue - model.income.cogs,
+            grossProfit: model.income.grossProfit,
             totalOpExpenses: model.income.totalExpenses,
             netIncomeBefore: model.income.netBeforeZakat,
             expenseDetails: model.income.expenses,
-            zakat: model.income.netBeforeZakat * 0.025,
-            tax: 0,
+            zakat: model.income.zakat,
+            tax: model.income.tax,
             netFinal: model.income.netAfterZakat
         });
 
+        // 2. الميزانية العمومية (تم إصلاح برامتر صافي الربح الأخير إلى الصافي الحقيقي بعد الزكاة)
         fillBalanceSheet(
-            model.totals.currentAssets,
-            model.totals.fixedNet,
-            model.totals.totalAssets,
+            model.assets.current.total,
+            model.assets.nonCurrent.fixedNet,
+            model.assets.totalAssets,
             {
-                cashAndEquivalents: model.assets.cash,
-                receivables: model.assets.receivables,
-                inventory: model.assets.inventory,
-                currentLiabilities: model.liabilities.current,
-                nonCurrentLiabilities: model.liabilities.nonCurrent
+                cashAndEquivalents: model.assets.current.cash,
+                receivables: model.assets.current.receivables,
+                inventory: model.assets.current.inventory,
+                currentLiabilities: model.liabilities.current.total,
+                nonCurrentLiabilities: model.liabilities.nonCurrent.total
             },
-            model.totals.totalLiabilities,
-            model.totals.totalEquity,
-            model.totals.totalLiabilities + model.totals.totalEquity,
-            model.income.netBeforeZakat
+            model.liabilities.totalLiabilities,
+            model.equity.total,
+            model.totalLiabilitiesAndEquity,
+            model.income.netAfterZakat
         );
 
+        // 3. كروت الأداء والنسب المالية الذكية
         updateKPICards(
             model.income.revenue,
-            model.income.revenue - model.income.cogs,
+            model.income.grossProfit,
             model.income.netAfterZakat,
-            model.totals.totalAssets
+            model.assets.totalAssets
         );
 
         computeFinancialRatios(
@@ -85,36 +239,43 @@ export async function generateFinancialStatements() {
             model.ratios.netMargin
         );
 
+        // 4. الرسوم البيانية التنفيذية والمؤشرات
         renderExecutiveCharts({
             revenue: model.income.revenue,
             cogs: model.income.cogs,
-            grossProfit: model.income.revenue - model.income.cogs,
+            grossProfit: model.income.grossProfit,
             totalExpenses: model.income.totalExpenses,
             netIncome: model.income.netAfterZakat,
-            cashAndEquivalents: model.assets.cash,
-            receivables: model.assets.receivables,
-            inventory: model.assets.inventory,
-            fixedAssets: model.totals.fixedNet,
+            cashAndEquivalents: model.assets.current.cash,
+            receivables: model.assets.current.receivables,
+            inventory: model.assets.current.inventory,
+            fixedAssets: model.assets.nonCurrent.fixedNet,
             currentRatio: model.ratios.currentRatio,
             debtRatio: model.ratios.debtRatio,
             netMargin: model.ratios.netMargin,
             roa: model.ratios.roa
         });
 
-        checkBalance(model.totals.totalAssets, model.totals.totalLiabilities + model.totals.totalEquity);
+        // التحقق البصري التجميلي الأخير في الكونسول
+        checkBalance(model.assets.totalAssets, model.totalLiabilitiesAndEquity);
 
-        document.getElementById('statements-section').classList.remove('hidden');
+        // ----------------------------------------
+        // إنهاء المعالجة وتحديث عناصر التنقل والـ DOM
+        // ----------------------------------------
+        const statementsSection = document.getElementById('statements-section');
+        statementsSection.classList.remove('hidden');
+        
         document.getElementById('report-generation-date').textContent =
             new Date().toLocaleDateString('ar-SA', { year: 'numeric', month: 'long', day: 'numeric' });
 
         updateStepIndicator(3);
         switchTab('analytics');
-        document.getElementById('statements-section').scrollIntoView({ behavior: 'smooth' });
+        statementsSection.scrollIntoView({ behavior: 'smooth' });
 
-        showUIMessage("تم بنجاح", "تم توليد القوائم المالية بالكامل مع الزكاة والتحليل", "success");
+        showUIMessage("تم بنجاح", "تم توليد القوائم المالية والتحليلات بالكامل والميزانية متزنة.", "success");
 
     } catch (error) {
-        console.error("خطأ في توليد القوائم:", error);
-        showUIMessage("خطأ", "حدث خطأ أثناء معالجة البيانات", "danger");
+        console.error("خطأ حرج في نظام المعالجة والـ Engine:", error);
+        showUIMessage("خطأ في المعالجة", "حدث خطأ غير متوقع أثناء حساب وتوليد الهياكل المالية.", "danger");
     }
 }
