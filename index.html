@@ -1,147 +1,120 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>النظام المالي الذكي</title>
+import { financialModel } from "./models/financialModel.js";
+import { classifyAccount } from "./financial-engine/classify.js";
+import { computeIncome } from "./financial-engine/computeIncome.js";
+import { computeBalance } from "./financial-engine/computeBalance.js";
+import { computeRatios } from "./financial-engine/computeRatios.js";
+import { validateModel } from "./financial-engine/validate.js";
 
-    <!-- Tailwind CDN (اختياري) -->
-    <script src="https://cdn.tailwindcss.com"></script>
+export async function generateFinancialStatements() {
 
-    <style>
-        body {
-            background: #f7f7f7;
-            font-family: "Tajawal", sans-serif;
+    if (trialBalanceProcessed.length === 0) {
+        showUIMessage("لا توجد بيانات", "يرجى رفع ميزان المراجعة أو تجربة أحد الديموهات", "danger");
+        return;
+    }
+
+    try {
+        showUIMessage("جاري المعالجة...", "يتم حساب القوائم المالية وفق معايير IFRS مع دعم الزكاة...", "success");
+
+        // إنشاء نسخة جديدة من النموذج
+        const model = structuredClone(financialModel);
+
+        // تصنيف الحسابات
+        trialBalanceProcessed.forEach((acc, i) => {
+            const select = document.getElementById(`map-acc-${i}`);
+            const category = select ? select.value : "operating_expenses";
+            classifyAccount(acc, category, model);
+        });
+
+        // حساب قائمة الدخل
+        computeIncome(model);
+
+        // حساب الميزانية
+        computeBalance(model);
+
+        // حساب النسب
+        computeRatios(model);
+
+        // التحقق من الأخطاء
+        const errors = validateModel(model);
+        if (errors.length > 0) {
+            showUIMessage("خطأ", errors.join(" — "), "danger");
+            return;
         }
-        .card {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px #0001;
-        }
-    </style>
-</head>
 
-<body class="p-6">
+        // ربط النتائج مع دوال الواجهة الحالية
+        fillIncomeStatement({
+            revenue: model.income.revenue,
+            cogs: model.income.cogs,
+            grossProfit: model.income.revenue - model.income.cogs,
+            totalOpExpenses: model.income.totalExpenses,
+            netIncomeBefore: model.income.netBeforeZakat,
+            expenseDetails: model.income.expenses,
+            zakat: model.income.netBeforeZakat * 0.025,
+            tax: 0,
+            netFinal: model.income.netAfterZakat
+        });
 
-    <!-- عنوان -->
-    <h1 class="text-3xl font-bold text-center mb-6 text-slate-800">
-        النظام المالي الذكي – توليد القوائم المالية
-    </h1>
+        fillBalanceSheet(
+            model.totals.currentAssets,
+            model.totals.fixedNet,
+            model.totals.totalAssets,
+            {
+                cashAndEquivalents: model.assets.cash,
+                receivables: model.assets.receivables,
+                inventory: model.assets.inventory,
+                currentLiabilities: model.liabilities.current,
+                nonCurrentLiabilities: model.liabilities.nonCurrent
+            },
+            model.totals.totalLiabilities,
+            model.totals.totalEquity,
+            model.totals.totalLiabilities + model.totals.totalEquity,
+            model.income.netBeforeZakat
+        );
 
-    <!-- رسالة النظام -->
-    <div id="msg-box" class="text-center text-lg font-semibold mb-4"></div>
+        updateKPICards(
+            model.income.revenue,
+            model.income.revenue - model.income.cogs,
+            model.income.netAfterZakat,
+            model.totals.totalAssets
+        );
 
-    <!-- زر توليد القوائم -->
-    <div class="text-center mb-6">
-        <button onclick="generateFinancialStatements()"
-                class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-            توليد القوائم المالية
-        </button>
-    </div>
+        computeFinancialRatios(
+            model.ratios.currentRatio,
+            model.ratios.debtRatio,
+            model.ratios.roa,
+            model.ratios.netMargin
+        );
 
-    <!-- قسم القوائم المالية -->
-    <div id="statements-section" class="hidden space-y-10">
+        renderExecutiveCharts({
+            revenue: model.income.revenue,
+            cogs: model.income.cogs,
+            grossProfit: model.income.revenue - model.income.cogs,
+            totalExpenses: model.income.totalExpenses,
+            netIncome: model.income.netAfterZakat,
+            cashAndEquivalents: model.assets.cash,
+            receivables: model.assets.receivables,
+            inventory: model.assets.inventory,
+            fixedAssets: model.totals.fixedNet,
+            currentRatio: model.ratios.currentRatio,
+            debtRatio: model.ratios.debtRatio,
+            netMargin: model.ratios.netMargin,
+            roa: model.ratios.roa
+        });
 
-        <!-- قائمة الدخل -->
-        <div class="card">
-            <h2 class="text-2xl font-bold mb-4 text-slate-700">قائمة الدخل</h2>
+        checkBalance(model.totals.totalAssets, model.totals.totalLiabilities + model.totals.totalEquity);
 
-            <div class="space-y-2">
-                <div class="flex justify-between">
-                    <span>الإيرادات</span>
-                    <span id="inc-revenue">0</span>
-                </div>
+        document.getElementById('statements-section').classList.remove('hidden');
+        document.getElementById('report-generation-date').textContent =
+            new Date().toLocaleDateString('ar-SA', { year: 'numeric', month: 'long', day: 'numeric' });
 
-                <div class="flex justify-between">
-                    <span>تكلفة المبيعات</span>
-                    <span id="inc-cogs">0</span>
-                </div>
+        updateStepIndicator(3);
+        switchTab('analytics');
+        document.getElementById('statements-section').scrollIntoView({ behavior: 'smooth' });
 
-                <div class="flex justify-between font-semibold text-blue-700">
-                    <span>مجمل الربح</span>
-                    <span id="inc-gross">0</span>
-                </div>
+        showUIMessage("تم بنجاح", "تم توليد القوائم المالية بالكامل مع الزكاة والتحليل", "success");
 
-                <hr class="my-3">
-
-                <h3 class="font-bold text-slate-700">المصروفات التشغيلية</h3>
-                <table class="w-full mt-2">
-                    <tbody id="inc-expenses-list"></tbody>
-                </table>
-
-                <div class="flex justify-between font-semibold">
-                    <span>إجمالي المصروفات</span>
-                    <span id="inc-exp-total">0</span>
-                </div>
-
-                <hr class="my-3">
-
-                <div class="flex justify-between text-green-700 font-bold text-lg">
-                    <span>صافي الربح</span>
-                    <span id="inc-net">0</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- الميزانية العمومية -->
-        <div class="card">
-            <h2 class="text-2xl font-bold mb-4 text-slate-700">الميزانية العمومية</h2>
-
-            <h3 class="font-bold text-slate-700">الأصول المتداولة</h3>
-            <div class="space-y-2 mt-2">
-                <div class="flex justify-between"><span>النقدية</span><span id="bs-cash">0</span></div>
-                <div class="flex justify-between"><span>الذمم المدينة</span><span id="bs-receivables">0</span></div>
-                <div class="flex justify-between"><span>المخزون</span><span id="bs-inventory">0</span></div>
-                <div class="flex justify-between font-semibold"><span>إجمالي الأصول المتداولة</span><span id="bs-current-assets">0</span></div>
-            </div>
-
-            <hr class="my-3">
-
-            <h3 class="font-bold text-slate-700">الأصول غير المتداولة</h3>
-            <div class="flex justify-between mt-2">
-                <span>الأصول الثابتة الصافية</span>
-                <span id="bs-fixed-net">0</span>
-            </div>
-
-            <div class="flex justify-between font-bold text-blue-700 mt-3">
-                <span>إجمالي الأصول</span>
-                <span id="bs-total-assets">0</span>
-            </div>
-
-            <hr class="my-3">
-
-            <h3 class="font-bold text-slate-700">الخصوم</h3>
-            <div class="space-y-2 mt-2">
-                <div class="flex justify-between"><span>الخصوم المتداولة</span><span id="bs-current-liab">0</span></div>
-                <div class="flex justify-between"><span>الخصوم طويلة الأجل</span><span id="bs-noncurrent-liab">0</span></div>
-                <div class="flex justify-between font-semibold"><span>إجمالي الخصوم</span><span id="bs-total-liab">0</span></div>
-            </div>
-
-            <hr class="my-3">
-
-            <div class="flex justify-between font-bold text-green-700 text-lg">
-                <span>حقوق الملكية</span>
-                <span id="bs-equity">0</span>
-            </div>
-        </div>
-
-        <!-- النسب المالية -->
-        <div class="card">
-            <h2 class="text-2xl font-bold mb-4 text-slate-700">النسب المالية</h2>
-
-            <div class="space-y-2">
-                <div class="flex justify-between"><span>نسبة السيولة</span><span id="ratio-current">0</span></div>
-                <div class="flex justify-between"><span>نسبة المديونية</span><span id="ratio-debt">0%</span></div>
-                <div class="flex justify-between"><span>العائد على الأصول</span><span id="ratio-roa">0%</span></div>
-                <div class="flex justify-between"><span>هامش صافي الربح</span><span id="ratio-netmargin">0%</span></div>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- ربط ملفات JS -->
-    <script type="module" src="./main.js"></script>
-
-</body>
-</html>
+    } catch (error) {
+        console.error("خطأ في توليد القوائم:", error);
+        showUIMessage("خطأ", "حدث خطأ أثناء معالجة البيانات", "danger");
+    }
+}
