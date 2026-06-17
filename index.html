@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة قوائم المالية الذكية | الإصدار الاحترافي السحابي</title>
+    <title>منصة قوائم المالية الذكية | الإصدار الاحترافي المرن</title>
     <!-- Tailwind CSS for Advanced Responsive Styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Cairo & IBM Plex Sans Arabic Fonts for Executive Feel -->
@@ -100,7 +100,7 @@
                 </div>
                 <div>
                     <h1 class="text-xl sm:text-2xl font-black tracking-tight flex items-center gap-2">
-                        قوائم الذكية <span class="bg-emerald-500/10 text-emerald-400 text-xs px-2.5 py-1 rounded-full font-semibold border border-emerald-500/20">النسخة السحابية v3.0</span>
+                        قوائم الذكية <span class="bg-emerald-500/10 text-emerald-400 text-xs px-2.5 py-1 rounded-full font-semibold border border-emerald-500/20">إصدار مرن ذكي</span>
                     </h1>
                     <p class="text-xs text-slate-400 font-light mt-0.5">توليد القوائم المالية، النسب الاقتصادية، والتحليل التلقائي بنقرة واحدة</p>
                 </div>
@@ -109,9 +109,9 @@
             <div class="flex items-center gap-3">
                 <!-- User Auth Status Widget in Header -->
                 <div id="auth-header-widget" class="flex items-center gap-2">
-                    <button onclick="openAuthModal()" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3.5 py-2.5 rounded-lg flex items-center gap-1.5 transition shadow-sm">
-                        <i class="fa-solid fa-user-lock"></i> تسجيل الدخول / حساب جديد
-                    </button>
+                    <span class="text-xs bg-slate-800 text-slate-300 border border-slate-700 px-3 py-2 rounded-lg flex items-center gap-1.5">
+                        <i class="fa-solid fa-circle text-emerald-500 animate-pulse"></i> العمل بالوضع المحلي النشط
+                    </span>
                 </div>
                 <div class="h-6 w-px bg-slate-700"></div>
                 <button onclick="triggerReset()" class="text-xs bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-700 transition px-3 py-2 rounded-lg flex items-center gap-1.5">
@@ -131,7 +131,7 @@
                 <div class="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full text-xs font-semibold mb-4 border border-emerald-500/30">
                     <i class="fa-solid fa-wand-magic-sparkles"></i> ذكاء اصطناعي مالي كامل
                 </div>
-                <h2 class="text-2xl sm:text-3xl font-extrabold mb-3 tracking-tight">استخراج وتصنيف القوائم المالية بامتياز سحابي</h2>
+                <h2 class="text-2xl sm:text-3xl font-extrabold mb-3 tracking-tight">استخراج وتصنيف القوائم المالية بامتياز مباشر</h2>
                 <p class="text-slate-300 text-sm leading-relaxed mb-6 font-light">
                     ارفع ميزان المراجعة بصيغة Excel أو CSV. سيقوم نظام المطابقة بتحديد الأصول، الالتزامات، المصروفات، والإيرادات بشكل مباشر، ليعطيك قائمة المركز المالي، وقائمة الدخل، إضافة إلى تقرير تحليلي يشمل مؤشرات السيولة، المديونية والربحية تلقائياً.
                 </p>
@@ -651,9 +651,9 @@
         <!-- Local Reports Archive Manager (No Print) -->
         <section class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 no-print mt-8">
             <h4 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-1.5">
-                <i class="fa-solid fa-folder-open text-amber-500"></i> سجل الموازين والتقارير المحفوظة
+                <i class="fa-solid fa-folder-open text-amber-500"></i> سجل الموازين والتقارير المحفوظة محلياً
             </h4>
-            <p class="text-xs text-slate-500 mb-4">يعرض هذا السجل تقاريرك المالية. يتم تخزين التقارير السحابية بأمان على السيرفر، بينما تقتصر التقارير المحلية على متصفحك الحالي.</p>
+            <p class="text-xs text-slate-500 mb-4">يعرض هذا السجل تقاريرك المالية التي يتم حفظها محلياً بأمان على متصفح جهازك الحالي.</p>
             <div id="saved-reports-list" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <p class="text-xs text-slate-400 italic col-span-full">لا توجد تقارير مؤرشفة حالياً.</p>
             </div>
@@ -661,101 +661,15 @@
 
     </main>
 
-    <!-- Auth Modal (No Print) -->
-    <div id="auth-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden no-print">
-        <div class="bg-white rounded-3xl shadow-2xl border border-slate-200 w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-            <!-- Modal Header -->
-            <div class="bg-navy-900 text-white p-6 relative">
-                <button onclick="closeAuthModal()" class="absolute left-6 top-6 text-slate-400 hover:text-white transition">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
-                <h3 class="text-xl font-extrabold flex items-center gap-2">
-                    <i class="fa-solid fa-user-shield text-emerald-400"></i> بوابة الحساب المالي الآمن
-                </h3>
-                <p class="text-xs text-slate-400 mt-1">سجل دخولك لحفظ ومزامنة قوائمك المالية سحابياً</p>
-            </div>
-
-            <!-- Tabs -->
-            <div class="flex border-b border-slate-100 bg-slate-50 text-xs">
-                <button id="auth-tab-login" onclick="toggleAuthTab('login')" class="flex-1 py-4 text-center font-bold border-b-2 border-emerald-500 text-emerald-600 transition-colors">
-                    <i class="fa-solid fa-sign-in-alt ml-1"></i> تسجيل الدخول
-                </button>
-                <button id="auth-tab-signup" onclick="toggleAuthTab('signup')" class="flex-1 py-4 text-center font-semibold text-slate-500 border-b-2 border-transparent hover:text-slate-700 transition-colors">
-                    <i class="fa-solid fa-user-plus ml-1"></i> إنشاء حساب جديد
-                </button>
-            </div>
-
-            <!-- Form Body -->
-            <form onsubmit="handleAuthSubmit(event)" class="p-6 space-y-4">
-                <input type="hidden" id="auth-action-type" value="login">
-                
-                <div>
-                    <label class="block text-xs font-bold text-slate-600 mb-2">اسم المستخدم</label>
-                    <div class="relative">
-                        <input type="text" id="auth-username" required class="w-full text-xs p-3 pr-9 rounded-xl border border-slate-200 outline-none focus:border-emerald-500 bg-slate-50" placeholder="مثال: ahmed_acc">
-                        <i class="fa-solid fa-user text-slate-400 absolute right-3 top-3.5 text-xs"></i>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-600 mb-2">كلمة المرور</label>
-                    <div class="relative">
-                        <input type="password" id="auth-password" required class="w-full text-xs p-3 pr-9 rounded-xl border border-slate-200 outline-none focus:border-emerald-500 bg-slate-50" placeholder="••••••••">
-                        <i class="fa-solid fa-lock text-slate-400 absolute right-3 top-3.5 text-xs"></i>
-                    </div>
-                </div>
-
-                <div id="signup-confirm-wrapper" class="hidden">
-                    <label class="block text-xs font-bold text-slate-600 mb-2">تأكيد كلمة المرور</label>
-                    <div class="relative">
-                        <input type="password" id="auth-password-confirm" class="w-full text-xs p-3 pr-9 rounded-xl border border-slate-200 outline-none focus:border-emerald-500 bg-slate-50" placeholder="••••••••">
-                        <i class="fa-solid fa-lock-open text-slate-400 absolute right-3 top-3.5 text-xs"></i>
-                    </div>
-                </div>
-
-                <div id="auth-error-msg" class="text-[10px] text-rose-600 font-bold hidden bg-rose-50 p-2.5 rounded-lg border border-rose-100 flex items-center gap-1.5">
-                    <i class="fa-solid fa-circle-exclamation"></i> <span id="auth-error-text">حدث خطأ ما</span>
-                </div>
-
-                <button type="submit" id="auth-submit-btn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-3.5 rounded-xl transition shadow-md flex items-center justify-center gap-2">
-                    <span>دخول آمن</span> <i class="fa-solid fa-shield-halved"></i>
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Save Prompt Modal (No Print) -->
-    <div id="save-prompt-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden no-print">
-        <div class="bg-white rounded-3xl shadow-2xl border border-slate-200 w-full max-w-md overflow-hidden p-6 text-center space-y-4">
-            <div class="w-16 h-16 bg-amber-50 text-amber-500 rounded-full flex items-center justify-center mx-auto text-2xl">
-                <i class="fa-solid fa-cloud-arrow-up"></i>
-            </div>
-            <div>
-                <h3 class="text-lg font-bold text-slate-800">حفظ سحابي أم حفظ محلي؟</h3>
-                <p class="text-xs text-slate-500 mt-2 leading-relaxed">
-                    أنت غير مسجل الدخول حالياً. يمكنك حفظ التقرير محلياً على هذا الجهاز الحالي، أو تسجيل الدخول/إنشاء حساب سحابي لحفظ تقاريرك بشكل دائم والوصول إليها من أي مكان آخر!
-                </p>
-            </div>
-            <div class="grid grid-cols-2 gap-2 pt-2">
-                <button onclick="confirmLocalSave()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold py-3 rounded-xl transition">
-                    <i class="fa-solid fa-desktop ml-1"></i> حفظ محلي
-                </button>
-                <button onclick="closeSavePromptModal(); openAuthModal();" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-3 rounded-xl transition shadow">
-                    <i class="fa-solid fa-user-lock ml-1"></i> تسجيل الدخول
-                </button>
-            </div>
-        </div>
-    </div>
-
     <!-- Global Website Footer (No Print) -->
     <footer class="bg-navy-900 text-slate-400 py-8 mt-12 border-t border-slate-800 text-center text-xs no-print">
         <p class="font-semibold text-slate-300">© ٢٠٢٦ منصة قوائم المالية الذكية. جميع الحقوق محفوظة.</p>
         <p class="mt-2 text-slate-500 max-w-lg mx-auto leading-relaxed">المنصة تم تصميمها لتوفير المجهود المحاسبي وضمان إعداد القوائم الختامية بكفاءة وتوازن رياضي كامل وفق المعايير الدولية لإعداد التقارير المالية (IFRS).</p>
     </footer>
 
-    <!-- INTERACTIVE ENGINE JAVASCRIPT CODE WITH FIREBASE INTEGRATION -->
+    <!-- INTERACTIVE ENGINE JAVASCRIPT CODE WITH RESILIENT BACKUP -->
     <script type="module">
-        // Import Firebase App and Services
+        // Import Firebase App and Services (Safe loading)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
@@ -770,18 +684,39 @@
         let firebaseUser = null;       // Base session user
 
         // Guard against missing Firebase variables safely
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
-            apiKey: "", authDomain: "", projectId: "", storageBucket: "", messagingSenderId: "", appId: ""
-        };
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'qawaim-default-app';
+        let firebaseConfig = null;
+        let appId = 'qawaim-default-app';
+        let firebaseEnabled = false;
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+        let app = null;
+        let auth = null;
+        let db = null;
 
-        // Rule 3: Auth Before Queries
+        // Smart check to prevent crashes if credentials aren't defined
+        try {
+            if (typeof __firebase_config !== 'undefined' && __firebase_config) {
+                firebaseConfig = JSON.parse(__firebase_config);
+            }
+            if (typeof __app_id !== 'undefined' && __app_id) {
+                appId = __app_id;
+            }
+
+            if (firebaseConfig && firebaseConfig.apiKey) {
+                app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+                firebaseEnabled = true;
+                console.log("Firebase initialized successfully. Running in Cloud Mode.");
+            } else {
+                console.warn("No Firebase configuration found. Running smoothly in Resilient Local Mode.");
+            }
+        } catch (e) {
+            console.warn("Firebase failed to initialize:", e, ". Running in fallback Local Mode.");
+        }
+
+        // Rule 3: Auth Before Queries (Safe Implementation)
         const initAuth = async () => {
+            if (!firebaseEnabled || !auth) return;
             try {
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                     await signInWithCustomToken(auth, __initial_auth_token);
@@ -794,12 +729,14 @@
         };
         initAuth();
 
-        onAuthStateChanged(auth, (user) => {
-            firebaseUser = user;
-            if (user && currentAppUser) {
-                loadCloudReports();
-            }
-        });
+        if (firebaseEnabled && auth) {
+            onAuthStateChanged(auth, (user) => {
+                firebaseUser = user;
+                if (user && currentAppUser) {
+                    loadCloudReports();
+                }
+            });
+        }
 
         // Predefined professional categories
         const mappingCategories = {
@@ -1458,36 +1395,13 @@
             buttons[tab].className = "px-4 py-2.5 rounded-lg text-xs font-bold transition-all bg-navy-800 text-white shadow-sm flex items-center gap-1.5";
         }
 
-        // Render Local & Cloud reports list archive in a unified interface
+        // Render Local reports list archive
         function renderAllReports() {
             const container = document.getElementById('saved-reports-list');
             container.innerHTML = '';
             let hasReports = false;
 
-            // 1. Render Cloud Reports
-            if (currentAppUser && cloudReports.length > 0) {
-                hasReports = true;
-                cloudReports.forEach(report => {
-                    const card = document.createElement('div');
-                    card.className = "bg-emerald-50/50 border border-emerald-100 p-4 rounded-xl flex justify-between items-center text-xs relative overflow-hidden group";
-                    card.innerHTML = `
-                        <div>
-                            <span class="absolute top-2 left-2 bg-emerald-100 text-emerald-800 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-0.5">
-                                <i class="fa-solid fa-cloud"></i> سحابي
-                            </span>
-                            <strong class="text-slate-800 block pr-8 font-bold">${report.company}</strong>
-                            <span class="text-slate-400 block mt-1"><i class="fa-solid fa-clock"></i> ${report.date}</span>
-                        </div>
-                        <div class="flex gap-1 z-10">
-                            <button onclick="restoreCloudReport('${report.id}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-2.5 py-1.5 rounded-lg transition"><i class="fa-solid fa-folder-open"></i> استعادة</button>
-                            <button onclick="deleteCloudReport('${report.id}')" class="text-rose-600 hover:text-rose-800 px-2 py-1.5 rounded-lg transition"><i class="fa-solid fa-trash-can"></i></button>
-                        </div>
-                    `;
-                    container.appendChild(card);
-                });
-            }
-
-            // 2. Render Local Reports
+            // Render Local Reports
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
                 if (key.startsWith('qawaim_report_')) {
@@ -1500,7 +1414,7 @@
                             <span class="absolute top-2 left-2 bg-slate-200 text-slate-700 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-0.5">
                                 <i class="fa-solid fa-desktop"></i> محلي
                             </span>
-                            <strong class="text-slate-800 block pr-8">${data.company}</strong>
+                            <strong class="text-slate-800 block pr-8 font-bold">${data.company}</strong>
                             <span class="text-slate-400 block mt-1"><i class="fa-solid fa-clock"></i> ${data.date}</span>
                         </div>
                         <div class="flex gap-1">
@@ -1513,7 +1427,7 @@
             }
 
             if (!hasReports) {
-                container.innerHTML = '<p class="text-xs text-slate-400 italic col-span-full text-center">لا توجد تقارير مؤرشفة حالياً.</p>';
+                container.innerHTML = '<p class="text-xs text-slate-400 italic col-span-full text-center">لا توجد تقارير مؤرشفة حالياً في ذاكرة المتصفح.</p>';
             }
         }
 
@@ -1535,91 +1449,8 @@
             renderAllReports();
         }
 
-        // Load Synced cloud reports for current user
-        async function loadCloudReports() {
-            if (!firebaseUser || !currentAppUser) return;
-            try {
-                const querySnapshot = await getDocs(collection(db, 'artifacts', appId, 'public', 'data', 'reports'));
-                cloudReports = [];
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    if (data.uid === currentAppUser.uid) {
-                        cloudReports.push({
-                            id: doc.id,
-                            ...data,
-                            trialBalance: typeof data.trialBalance === 'string' ? JSON.parse(data.trialBalance) : data.trialBalance
-                        });
-                    }
-                });
-                cloudReports.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-                renderAllReports();
-            } catch (err) {
-                console.error("Error loading cloud reports:", err);
-            }
-        }
-
-        // Restore Report from Cloud Storage
-        function restoreCloudReport(id) {
-            const report = cloudReports.find(r => r.id === id);
-            if (report) {
-                trialBalanceProcessed = JSON.parse(JSON.stringify(report.trialBalance));
-                document.getElementById('report-company-name').textContent = report.company;
-                setupMappingUI();
-                updateStepIndicator(2);
-                showUIMessage("استعادة التقرير", `تم تحميل بيانات شركة ${report.company} من السحابة بنجاح.`, "success");
-            }
-        }
-
-        // Delete Report from Cloud Storage
-        async function deleteCloudReport(id) {
-            if (!firebaseUser) return;
-            try {
-                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'reports', id));
-                showUIMessage("تم الحذف", "تم حذف التقرير من السحابة بنجاح.", "success");
-                await loadCloudReports();
-            } catch (err) {
-                console.error("Error deleting cloud report:", err);
-                showUIMessage("خطأ في الحذف", "فشل حذف التقرير من السحابة.", "danger");
-            }
-        }
-
-        // Save Current Report handler (Cloud / Local Prompt)
-        async function saveCurrentReport() {
-            if (currentAppUser) {
-                if (!firebaseUser) {
-                    showUIMessage("خطأ في الاتصال", "يرجى الانتظار حتى يتم إتمام الاتصال بخوادم قاعدة البيانات.", "danger");
-                    return;
-                }
-
-                const company = document.getElementById('report-company-name').textContent;
-                const date = new Date().toLocaleString('ar-SA');
-                
-                try {
-                    showUIMessage("جاري الحفظ...", "يتم الآن رفع قوائمك المالية للسحابة بأمان.", "success");
-                    
-                    await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'reports'), {
-                        uid: currentAppUser.uid,
-                        username: currentAppUser.username,
-                        company: company,
-                        date: date,
-                        trialBalance: JSON.stringify(trialBalanceProcessed), // Rule: Serialize nested arrays
-                        createdAt: new Date().toISOString()
-                    });
-
-                    showUIMessage("تم الحفظ سحابياً", "تم مزامنة وحفظ التقرير المالي على حسابك السحابي بنجاح!", "success");
-                    await loadCloudReports();
-                } catch (err) {
-                    console.error("Cloud save error:", err);
-                    showUIMessage("فشل الحفظ سحابياً", "حدث خطأ غير متوقع أثناء الاتصال بقاعدة البيانات.", "danger");
-                }
-            } else {
-                openSavePromptModal();
-            }
-        }
-
-        // Confirm local save if user bypasses cloud
-        function confirmLocalSave() {
-            closeSavePromptModal();
+        // Save Current Report handler
+        function saveCurrentReport() {
             const company = document.getElementById('report-company-name').textContent;
             const date = new Date().toLocaleString('ar-SA');
             const key = `qawaim_report_${Date.now()}`;
@@ -1631,190 +1462,7 @@
             
             localStorage.setItem(key, JSON.stringify(data));
             renderAllReports();
-            showUIMessage("تم الحفظ محلياً", "تم حفظ التقرير في ذاكرة المتصفح الحالية.", "success");
-        }
-
-        // Authenticated Session Security UI Updates
-        function updateAuthUI() {
-            const widget = document.getElementById('auth-header-widget');
-            if (currentAppUser) {
-                widget.innerHTML = `
-                    <div class="flex items-center gap-2.5">
-                        <div class="flex flex-col text-right">
-                            <span class="text-xs font-bold text-slate-100 flex items-center gap-1">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
-                                <i class="fa-solid fa-cloud text-emerald-400 text-[10px]"></i> ${currentAppUser.username}
-                            </span>
-                            <span class="text-[9px] text-slate-400">حساب سحابي نشط</span>
-                        </div>
-                        <button onclick="handleLogout()" class="text-xs bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-700 transition p-2 rounded-lg" title="تسجيل الخروج">
-                            <i class="fa-solid fa-right-from-bracket text-rose-400"></i>
-                        </button>
-                    </div>
-                `;
-            } else {
-                widget.innerHTML = `
-                    <button onclick="openAuthModal()" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3.5 py-2.5 rounded-lg flex items-center gap-1.5 transition shadow-sm">
-                        <i class="fa-solid fa-user-lock"></i> تسجيل الدخول / حساب جديد
-                    </button>
-                `;
-            }
-        }
-
-        // Custom Login & Sign-Up transactions with Hashing
-        async function handleAuthSubmit(e) {
-            e.preventDefault();
-            const actionType = document.getElementById('auth-action-type').value;
-            const usernameInput = document.getElementById('auth-username').value.trim();
-            const passwordInput = document.getElementById('auth-password').value;
-            const errorEl = document.getElementById('auth-error-msg');
-            const errorText = document.getElementById('auth-error-text');
-
-            errorEl.classList.add('hidden');
-
-            if (!usernameInput || !passwordInput) {
-                errorText.textContent = "يرجى تعبئة كافة الحقول المطلوبة.";
-                errorEl.classList.remove('hidden');
-                return;
-            }
-
-            const usernameRegex = /^[a-zA-Z0-9_]+$/;
-            if (!usernameRegex.test(usernameInput)) {
-                errorText.textContent = "اسم المستخدم يجب أن يحتوي على حروف إنجليزية، أرقام، أو شرطة سفلية فقط وبدون مسافات.";
-                errorEl.classList.remove('hidden');
-                return;
-            }
-
-            const usernameLower = usernameInput.toLowerCase();
-            const passwordHash = await hashPassword(passwordInput);
-
-            try {
-                if (actionType === 'signup') {
-                    const confirmPassword = document.getElementById('auth-password-confirm').value;
-                    if (passwordInput !== confirmPassword) {
-                        errorText.textContent = "كلمتا المرور غير متطابقتين.";
-                        errorEl.classList.remove('hidden');
-                        return;
-                    }
-                    if (passwordInput.length < 6) {
-                        errorText.textContent = "يجب أن تكون كلمة المرور مكونة من 6 خانات على الأقل.";
-                        errorEl.classList.remove('hidden');
-                        return;
-                    }
-
-                    // Query check for existing username (Rule 2 compliant)
-                    const userDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'users', usernameLower);
-                    const userDoc = await getDoc(userDocRef);
-
-                    if (userDoc.exists()) {
-                        errorText.textContent = "اسم المستخدم هذا مسجل بالفعل. يرجى اختيار اسم مستخدم آخر.";
-                        errorEl.classList.remove('hidden');
-                        return;
-                    }
-
-                    // Create User Account record
-                    const newUid = crypto.randomUUID();
-                    await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'users', usernameLower), {
-                        username: usernameInput,
-                        passwordHash: passwordHash,
-                        uid: newUid,
-                        createdAt: new Date().toISOString()
-                    });
-
-                    currentAppUser = { username: usernameInput, uid: newUid };
-                    localStorage.setItem('qawaim_current_user', JSON.stringify(currentAppUser));
-                    
-                    showUIMessage("مرحباً بك سحابياً", `أهلاً بك يا ${usernameInput}! تم تسجيل دخولك بنجاح.`, "success");
-                    closeAuthModal();
-                    updateAuthUI();
-                    await loadCloudReports();
-                } else {
-                    // Login Process
-                    const userDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'users', usernameLower);
-                    const userDoc = await getDoc(userDocRef);
-                    
-                    if (!userDoc.exists() || userDoc.data().passwordHash !== passwordHash) {
-                        errorText.textContent = "اسم المستخدم أو كلمة المرور غير صحيحة.";
-                        errorEl.classList.remove('hidden');
-                        return;
-                    }
-
-                    const userData = userDoc.data();
-                    currentAppUser = { username: userData.username, uid: userData.uid };
-                    localStorage.setItem('qawaim_current_user', JSON.stringify(currentAppUser));
-
-                    showUIMessage("تم تسجيل الدخول", `مرحباً بعودتك يا ${userData.username}!`, "success");
-                    closeAuthModal();
-                    updateAuthUI();
-                    await loadCloudReports();
-                }
-            } catch (err) {
-                console.error("Authentication error:", err);
-                errorText.textContent = "فشل تنفيذ العملية. تأكد من جودة اتصال الإنترنت والتهيئة السحابية.";
-                errorEl.classList.remove('hidden');
-            }
-        }
-
-        // Logout Transaction
-        function handleLogout() {
-            currentAppUser = null;
-            localStorage.removeItem('qawaim_current_user');
-            cloudReports = [];
-            updateAuthUI();
-            renderAllReports();
-            showUIMessage("تم تسجيل الخروج", "تم تسجيل خروجك من النظام بنجاح.", "success");
-        }
-
-        // SHA-256 standard browser cryptography algorithm
-        async function hashPassword(password) {
-            const msgBuffer = new TextEncoder().encode(password);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-
-        // Modals Toggle UI Helpers
-        function openAuthModal() {
-            document.getElementById('auth-modal').classList.remove('hidden');
-            document.getElementById('auth-username').value = '';
-            document.getElementById('auth-password').value = '';
-            document.getElementById('auth-password-confirm').value = '';
-            document.getElementById('auth-error-msg').classList.add('hidden');
-            toggleAuthTab('login');
-        }
-
-        function closeAuthModal() {
-            document.getElementById('auth-modal').classList.add('hidden');
-        }
-
-        function openSavePromptModal() {
-            document.getElementById('save-prompt-modal').classList.remove('hidden');
-        }
-
-        function closeSavePromptModal() {
-            document.getElementById('save-prompt-modal').classList.add('hidden');
-        }
-
-        function toggleAuthTab(tab) {
-            const loginBtn = document.getElementById('auth-tab-login');
-            const signupBtn = document.getElementById('auth-tab-signup');
-            const confirmWrapper = document.getElementById('signup-confirm-wrapper');
-            const actionTypeInput = document.getElementById('auth-action-type');
-            const submitBtn = document.getElementById('auth-submit-btn');
-
-            if (tab === 'login') {
-                loginBtn.className = "flex-1 py-4 text-center font-bold border-b-2 border-emerald-500 text-emerald-600 transition-colors";
-                signupBtn.className = "flex-1 py-4 text-center font-semibold text-slate-500 border-b-2 border-transparent hover:text-slate-700 transition-colors";
-                confirmWrapper.classList.add('hidden');
-                actionTypeInput.value = 'login';
-                submitBtn.innerHTML = `<span>دخول آمن</span> <i class="fa-solid fa-shield-halved"></i>`;
-            } else {
-                loginBtn.className = "flex-1 py-4 text-center font-semibold text-slate-500 border-b-2 border-transparent hover:text-slate-700 transition-colors";
-                signupBtn.className = "flex-1 py-4 text-center font-bold border-b-2 border-emerald-500 text-emerald-600 transition-colors";
-                confirmWrapper.classList.remove('hidden');
-                actionTypeInput.value = 'signup';
-                submitBtn.innerHTML = `<span>إنشاء حساب مالي سحابي</span> <i class="fa-solid fa-cloud-arrow-up"></i>`;
-            }
+            showUIMessage("تم الحفظ محلياً", "تم حفظ وتثبيت التقرير المالي الحالي في أرشيف المتصفح بنجاح.", "success");
         }
 
         // High end UX Alert dialog styling instead of window.alert()
@@ -1878,26 +1526,8 @@
         window.restoreReport = restoreReport;
         window.deleteReport = deleteReport;
         window.downloadSampleTemplate = downloadSampleTemplate;
-        
-        // Expose new Auth and Synced Actions
-        window.openAuthModal = openAuthModal;
-        window.closeAuthModal = closeAuthModal;
-        window.closeSavePromptModal = closeSavePromptModal;
-        window.toggleAuthTab = toggleAuthTab;
-        window.handleAuthSubmit = handleAuthSubmit;
-        window.handleLogout = handleLogout;
-        window.confirmLocalSave = confirmLocalSave;
-        window.restoreCloudReport = restoreCloudReport;
-        window.deleteCloudReport = deleteCloudReport;
 
-        // Execute initial state restore
-        const storedUser = localStorage.getItem('qawaim_current_user');
-        if (storedUser) {
-            currentAppUser = JSON.parse(storedUser);
-            updateAuthUI();
-        }
         renderAllReports();
-
     </script>
 </body>
 </html>
