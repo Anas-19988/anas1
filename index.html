@@ -12,9 +12,27 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: 'Cairo', 'IBM Plex Sans Arabic', sans-serif !important;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
 </head>
-<body class="bg-slate-50 font-['Cairo'] text-slate-800">
+<body class="bg-slate-50 text-slate-800">
 
     <div id="offline-toast" class="hidden fixed bottom-5 right-5 bg-red-600 text-white px-6 py-3 rounded-lg shadow-2xl z-50 flex items-center gap-3 animate-bounce">
         <i class="fas fa-wifi-slash"></i>
@@ -37,20 +55,20 @@
                 </nav>
             </div>
             <div class="pt-5 border-t border-slate-800 text-xs text-slate-500 text-center">
-                الإصدار الاحترافي v2.0
+                الإصدار الاحترافي v2.5
             </div>
         </aside>
 
         <main class="flex-1 p-6 md:p-10 space-y-6">
             <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-slate-200 pb-5">
                 <div>
-                    <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900">لوحة المراقبة المالية الذكية</h1>
-                    <p class="text-slate-500 text-sm mt-1">قم برفع ملفات البيانات واستعراض التحليلات فوراً</p>
+                    <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900">لوحة المراقبة وتوليد القوائم المالية</h1>
+                    <p class="text-slate-500 text-sm mt-1">قم برفع ميزان المراجعة لاستخراج القوائم والميزانية فوراً</p>
                 </div>
                 <div class="flex items-center gap-3">
                     <label class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-lg cursor-pointer shadow-sm font-medium transition-all text-sm">
                         <i class="fas fa-cloud-upload-alt"></i>
-                        <span>رفع ملف Excel / CSV</span>
+                        <span>رفع ميزان المراجعة (Excel)</span>
                         <input type="file" id="excel-uploader" accept=".xlsx, .xls, .csv" class="hidden">
                     </label>
                 </div>
@@ -60,46 +78,4 @@
                 <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-slate-500">إجمالي الإيرادات</p>
-                        <h3 id="total-revenues" class="text-2xl font-bold text-slate-900 mt-1">0.00 ر.س</h3>
-                    </div>
-                    <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center text-xl"><i class="fas fa-wallet"></i></div>
-                </div>
-                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
-                    <div>
-                        <p class="text-sm font-medium text-slate-500">إجمالي المصروفات</p>
-                        <h3 id="total-expenses" class="text-2xl font-bold text-slate-900 mt-1">0.00 ر.س</h3>
-                    </div>
-                    <div class="w-12 h-12 bg-rose-50 text-rose-600 rounded-full flex items-center justify-center text-xl"><i class="fas fa-receipt"></i></div>
-                </div>
-                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
-                    <div>
-                        <p class="text-sm font-medium text-slate-500">صافي الأرباح</p>
-                        <h3 id="net-profit" class="text-2xl font-bold text-slate-900 mt-1">0.00 ر.س</h3>
-                    </div>
-                    <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center text-xl"><i class="fas fa-scale-balanced"></i></div>
-                </div>
-            </section>
-
-            <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-                    <h4 class="text-base font-bold text-slate-800 mb-4 flex items-center gap-2"><i class="fas fa-chart-bar text-blue-600"></i> تحليل الإيرادات الشهري</h4>
-                    <div class="relative h-72">
-                        <canvas id="revenueChart"></canvas>
-                    </div>
-                </div>
-                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-                    <h4 class="text-base font-bold text-slate-800 mb-4 flex items-center gap-2"><i class="fas fa-chart-pie text-purple-600"></i> توزيع نسب المصروفات</h4>
-                    <div class="relative h-72">
-                        <canvas id="expenseChart"></canvas>
-                    </div>
-                </div>
-            </section>
-        </main>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-
-    <script src="script.js"></script>
-</body>
-</html>
+                        <h3 id="total-revenues" class="text-2xl font-bold text-slate-90
