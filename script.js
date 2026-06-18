@@ -1,299 +1,174 @@
-// عند تحميل الصفحة بالكامل، ابدأ بتنفيذ العمليات الذكية
+console.log("Enterprise Pro Max — Glass Ultra Loaded");
+
 document.addEventListener("DOMContentLoaded", () => {
-    initNetworkMonitor();
     initCharts();
     loadSavedData();
-    
-    const uploader = document.getElementById('excel-uploader');
-    if (uploader) {
-        uploader.addEventListener('change', handleFileUpload);
-    }
+
+    document.getElementById("excel-uploader")
+        .addEventListener("change", handleFileUpload);
 });
 
-// متغيرات الرسوم البيانية العامة ليتم تحديثها ديناميكياً
 let revenueChartInstance = null;
 let expenseChartInstance = null;
 
-// 1. مراقبة حالة شبكة المستخدم
-function initNetworkMonitor() {
-    const toast = document.getElementById('offline-toast');
-    if (!toast) return;
+/* ---------------------- الرسوم ---------------------- */
 
-    const toggleToast = () => {
-        if (!navigator.onLine) toast.classList.remove('hidden');
-        else toast.classList.add('hidden');
-    };
-
-    window.addEventListener('offline', toggleToast);
-    window.addEventListener('online', toggleToast);
-    toggleToast();
-}
-
-// 2. إعداد الرسوم البيانية الافتراضية
 function initCharts() {
-    const revCanvas = document.getElementById('revenueChart');
-    const expCanvas = document.getElementById('expenseChart');
-    if (!revCanvas || !expCanvas) return;
+    const rev = document.getElementById("revenueChart");
+    const exp = document.getElementById("expenseChart");
 
-    const ctxRev = revCanvas.getContext('2d');
-    revenueChartInstance = new Chart(ctxRev, {
-        type: 'bar',
+    revenueChartInstance = new Chart(rev, {
+        type: "line",
         data: {
-            labels: ['يناير', 'فبراير', 'مارس', 'أبريل'],
+            labels: ["يناير", "فبراير", "مارس", "أبريل"],
             datasets: [{
-                label: 'الإيرادات ر.س',
+                label: "الإيرادات",
                 data: [0, 0, 0, 0],
-                backgroundColor: '#2563eb'
+                borderColor: "#ffffff",
+                backgroundColor: "rgba(255,255,255,0.2)",
+                borderWidth: 3,
+                tension: 0.4
             }]
         },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: true },
-                tooltip: { enabled: true }
-            },
-            scales: {
-                y: { beginAtZero: true }
-            }
-        }
+        options: { responsive: true }
     });
 
-    const ctxExp = expCanvas.getContext('2d');
-    expenseChartInstance = new Chart(ctxExp, {
-        type: 'doughnut',
+    expenseChartInstance = new Chart(exp, {
+        type: "doughnut",
         data: {
-            labels: ['التشغيل', 'التسويق', 'الأجور'],
+            labels: ["تشغيل", "تسويق", "أجور"],
             datasets: [{
                 data: [0, 0, 0],
-                backgroundColor: ['#e11d48', '#f59e0b', '#7c3aed']
+                backgroundColor: ["#ff4d6d", "#ffd166", "#6a4c93"]
             }]
         },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { position: 'bottom' }
-            }
-        }
+        options: { responsive: true }
     });
 }
 
-// 3. معالجة وقراءة ملفات الإكسل المرفوعة
+/* ---------------------- رفع الملف ---------------------- */
+
 function handleFileUpload(e) {
     const file = e.target.files[0];
     if (!file) return;
 
-    if (!file.name.match(/\.(xlsx|xls|csv)$/i)) {
-        showError("الرجاء رفع ملف Excel أو CSV فقط.");
-        return;
-    }
-
     const reader = new FileReader();
 
-    reader.onload = function(event) {
-        try {
-            const data = new Uint8Array(event.target.result);
-            const workbook = XLSX.read(data, { type: 'array' });
+    reader.onload = (event) => {
+        const data = new Uint8Array(event.target.result);
+        const workbook = XLSX.read(data, { type: "array" });
 
-            const firstSheetName = workbook.SheetNames[0];
-            const worksheet = workbook.Sheets[firstSheetName];
-            const jsonData = XLSX.utils.sheet_to_json(worksheet);
+        const sheet = workbook.SheetNames[0];
+        const json = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
 
-            if (!jsonData || jsonData.length === 0) {
-                showError("الملف لا يحتوي على بيانات قابلة للقراءة.");
-                return;
-            }
-
-            processFinancialData(jsonData, file.name);
-
-        } catch (err) {
-            console.error(err);
-            showError("حدث خطأ أثناء قراءة الملف. تأكد أن الملف سليم.");
-        }
+        processFinancialData(json, file.name);
     };
 
     reader.readAsArrayBuffer(file);
 }
 
-// 4. معالجة الأرقام المالية وتحديث الواجهة + LocalStorage
-function processFinancialData(data, fileName = 'غير معروف') {
+/* ---------------------- معالجة البيانات ---------------------- */
+
+function processFinancialData(data, fileName) {
     let totalRev = 0;
     let totalExp = 0;
 
-    const revenueKeys = ['الإيرادات', 'ايرادات', 'Revenue', 'Revenues', 'Sales', 'Income'];
-    const expenseKeys = ['المصروفات', 'مصروفات', 'Expenses', 'Expense', 'Cost', 'Costs'];
-
     data.forEach(row => {
-        let rev = 0;
-        let exp = 0;
-
-        for (let key of revenueKeys) {
-            if (row[key] !== undefined && row[key] !== null && row[key] !== '') {
-                const val = parseFloat(row[key]);
-                if (!isNaN(val)) {
-                    rev = val;
-                    break;
-                }
-            }
-        }
-
-        for (let key of expenseKeys) {
-            if (row[key] !== undefined && row[key] !== null && row[key] !== '') {
-                const val = parseFloat(row[key]);
-                if (!isNaN(val)) {
-                    exp = val;
-                    break;
-                }
-            }
-        }
-
-        totalRev += rev;
-        totalExp += exp;
+        totalRev += Number(row["Revenue"] || row["الإيرادات"] || 0);
+        totalExp += Number(row["Expenses"] || row["المصروفات"] || 0);
     });
 
     const netProfit = totalRev - totalExp;
 
-    const financialSummary = {
+    const summary = {
         totalRev,
         totalExp,
         netProfit,
-        fileName,
-        date: new Date().toISOString()
+        date: new Date().toISOString(),
+        fileName
     };
 
-    localStorage.setItem('financialData', JSON.stringify(financialSummary));
+    localStorage.setItem("financialData", JSON.stringify(summary));
 
-    updateUI(financialSummary);
-    updateCharts(totalRev, totalExp);
-    updateFinancialAnalysis(financialSummary);
+    updateUI(summary);
+    updateCharts(summary);
+    updateAnalysis(summary);
 }
 
-// 5. جلب وتثبيت البيانات المحفوظة سابقاً
+/* ---------------------- تحديث الواجهة ---------------------- */
+
 function loadSavedData() {
-    const saved = localStorage.getItem('financialData');
-    if (saved) {
-        const data = JSON.parse(saved);
-        updateUI(data);
-        updateCharts(data.totalRev || 0, data.totalExp || 0);
-        updateFinancialAnalysis(data);
-    }
+    const saved = localStorage.getItem("financialData");
+    if (!saved) return;
+
+    const data = JSON.parse(saved);
+    updateUI(data);
+    updateCharts(data);
+    updateAnalysis(data);
 }
 
-// تحديث العناصر النصية في الواجهة
 function updateUI(data) {
-    const totalRevEl = document.getElementById('total-revenues');
-    const totalExpEl = document.getElementById('total-expenses');
-    const netProfitEl = document.getElementById('net-profit');
-    const profitMarginEl = document.getElementById('profit-margin');
-    const lastUpdateEl = document.getElementById('last-update');
+    document.getElementById("total-revenues").innerText =
+        data.totalRev.toLocaleString("ar-SA") + " ر.س";
 
-    const totalRev = data.totalRev || 0;
-    const totalExp = data.totalExp || 0;
-    const netProfit = data.netProfit || 0;
+    document.getElementById("total-expenses").innerText =
+        data.totalExp.toLocaleString("ar-SA") + " ر.س";
 
-    if (totalRevEl) totalRevEl.innerText = totalRev.toLocaleString('ar-SA') + ' ر.س';
-    if (totalExpEl) totalExpEl.innerText = totalExp.toLocaleString('ar-SA') + ' ر.س';
-    if (netProfitEl) netProfitEl.innerText = netProfit.toLocaleString('ar-SA') + ' ر.س';
+    document.getElementById("net-profit").innerText =
+        data.netProfit.toLocaleString("ar-SA") + " ر.س";
 
-    const profitMargin = totalRev > 0 ? (netProfit / totalRev) * 100 : 0;
-    if (profitMarginEl) profitMarginEl.innerText = profitMargin.toFixed(1) + '٪';
+    document.getElementById("profit-margin").innerText =
+        ((data.netProfit / data.totalRev) * 100 || 0).toFixed(1) + "%";
 
-    if (lastUpdateEl && data.date) {
-        const d = new Date(data.date);
-        lastUpdateEl.innerText = `آخر تحديث: ${d.toLocaleString('ar-SA')} — ملف: ${data.fileName || 'غير معروف'}`;
-    }
+    document.getElementById("last-update").innerText =
+        "آخر تحديث: " + new Date(data.date).toLocaleString("ar-SA");
 }
 
-// تحديث الرسوم البيانية
-function updateCharts(totalRev, totalExp) {
-    if (revenueChartInstance) {
-        const revData = [
-            totalRev * 0.25,
-            totalRev * 0.15,
-            totalRev * 0.35,
-            totalRev * 0.25
-        ];
-        revenueChartInstance.data.datasets[0].data = revData;
-        revenueChartInstance.update();
-    }
+/* ---------------------- تحديث الرسوم ---------------------- */
 
-    if (expenseChartInstance) {
-        const expData = [
-            totalExp * 0.45,
-            totalExp * 0.30,
-            totalExp * 0.25
-        ];
-        expenseChartInstance.data.datasets[0].data = expData;
-        expenseChartInstance.update();
-    }
+function updateCharts(data) {
+    revenueChartInstance.data.datasets[0].data = [
+        data.totalRev * 0.2,
+        data.totalRev * 0.3,
+        data.totalRev * 0.25,
+        data.totalRev * 0.25
+    ];
+    revenueChartInstance.update();
+
+    expenseChartInstance.data.datasets[0].data = [
+        data.totalExp * 0.5,
+        data.totalExp * 0.3,
+        data.totalExp * 0.2
+    ];
+    expenseChartInstance.update();
 }
 
-// 6. نظام التحليل المالي الكامل
-function updateFinancialAnalysis(summary) {
-    const totalRev = summary.totalRev || 0;
-    const totalExp = summary.totalExp || 0;
-    const netProfit = summary.netProfit || 0;
+/* ---------------------- التحليل المالي ---------------------- */
 
-    const expenseRatioEl = document.getElementById('expense-ratio');
-    const netProfitRatioEl = document.getElementById('net-profit-ratio');
-    const breakEvenEl = document.getElementById('break-even-status');
-    const healthEl = document.getElementById('financial-health');
-    const analysisList = document.getElementById('analysis-summary');
+function updateAnalysis(data) {
+    const expRatio = (data.totalExp / data.totalRev) * 100 || 0;
+    const netRatio = (data.netProfit / data.totalRev) * 100 || 0;
 
-    const expenseRatio = totalRev > 0 ? (totalExp / totalRev) * 100 : 0;
-    const netProfitRatio = totalRev > 0 ? (netProfit / totalRev) * 100 : 0;
-    const breakEven = netProfit >= 0;
+    document.getElementById("expense-ratio").innerText = expRatio.toFixed(1) + "%";
+    document.getElementById("net-profit-ratio").innerText = netRatio.toFixed(1) + "%";
+    document.getElementById("break-even-status").innerText =
+        data.netProfit >= 0 ? "متحقق" : "غير متحقق";
 
-    if (expenseRatioEl) expenseRatioEl.innerText = expenseRatio.toFixed(1) + '٪';
-    if (netProfitRatioEl) netProfitRatioEl.innerText = netProfitRatio.toFixed(1) + '٪';
-    if (breakEvenEl) breakEvenEl.innerText = breakEven ? 'متحقق' : 'غير متحقق';
+    let health = "غير متوفر";
 
-    let healthText = 'غير متوفر';
-    if (totalRev === 0 && totalExp === 0) {
-        healthText = 'لا توجد بيانات كافية لتقييم الحالة المالية.';
-    } else if (netProfitRatio > 25 && expenseRatio < 60) {
-        healthText = 'الحالة المالية ممتازة مع ربحية عالية ومصروفات تحت السيطرة.';
-    } else if (netProfitRatio > 10 && expenseRatio < 80) {
-        healthText = 'الحالة المالية جيدة لكن يمكن تحسين كفاءة المصروفات.';
-    } else if (netProfitRatio >= 0) {
-        healthText = 'الحالة المالية مستقرة لكن الربحية منخفضة وتحتاج مراجعة.';
-    } else {
-        healthText = 'الحالة المالية حرجة مع خسائر قائمة، يلزم اتخاذ إجراءات تصحيحية.';
-    }
+    if (netRatio > 25) health = "ممتاز";
+    else if (netRatio > 10) health = "جيد";
+    else if (netRatio >= 0) health = "مقبول";
+    else health = "حرج";
 
-    if (healthEl) healthEl.innerText = healthText;
+    document.getElementById("financial-health").innerText = health;
 
-    if (analysisList) {
-        analysisList.innerHTML = '';
-
-        const points = [];
-
-        points.push(`إجمالي الإيرادات: ${totalRev.toLocaleString('ar-SA')} ر.س`);
-        points.push(`إجمالي المصروفات: ${totalExp.toLocaleString('ar-SA')} ر.س`);
-        points.push(`صافي الربح: ${netProfit.toLocaleString('ar-SA')} ر.س`);
-        points.push(`نسبة المصروفات إلى الإيرادات: ${expenseRatio.toFixed(1)}٪`);
-        points.push(`نسبة صافي الربح: ${netProfitRatio.toFixed(1)}٪`);
-        points.push(`نقطة التعادل: ${breakEven ? 'تم تجاوز نقطة التعادل (المنشأة رابحة).' : 'لم يتم تجاوز نقطة التعادل (المنشأة في حالة خسارة أو تعادل).'}`);
-
-        points.forEach(text => {
-            const li = document.createElement('li');
-            li.innerText = text;
-            analysisList.appendChild(li);
-        });
-    }
-}
-
-// 7. نظام تنبيه الأخطاء
-function showError(message) {
-    const toast = document.getElementById('error-toast');
-    const msgEl = document.getElementById('error-message');
-    if (!toast || !msgEl) return;
-
-    msgEl.innerText = message;
-    toast.classList.remove('hidden');
-
-    setTimeout(() => {
-        toast.classList.add('hidden');
-    }, 5000);
+    const list = document.getElementById("analysis-summary");
+    list.innerHTML = `
+        <li>إجمالي الإيرادات: ${data.totalRev.toLocaleString("ar-SA")} ر.س</li>
+        <li>إجمالي المصروفات: ${data.totalExp.toLocaleString("ar-SA")} ر.س</li>
+        <li>صافي الربح: ${data.netProfit.toLocaleString("ar-SA")} ر.س</li>
+        <li>نسبة المصروفات: ${expRatio.toFixed(1)}%</li>
+        <li>نسبة الربحية: ${netRatio.toFixed(1)}%</li>
+    `;
 }
