@@ -1,24 +1,111 @@
-/* إعدادات الهوية البصرية والخطوط لمنصة عُنوان */
 body {
-    font-family: 'Cairo', 'IBM Plex Sans Arabic', sans-serif !important;
+    font-family: 'Cairo', sans-serif;
 }
 
-/* تخصيص مؤشرات التمرير المخصصة لجداول البيانات المالية الكبيرة */
-::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-}
-::-webkit-scrollbar-track {
-    background: #f1f5f9;
-}
-::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
+/* تأثير الزجاج */
+.glass-ultra {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border-radius: 20px;
+    box-shadow: 0 0 40px rgba(255, 255, 255, 0.08);
 }
 
-/* تخصيص ألوان النيلي المعتمدة في الهوية المرئية للكود الخاص بك */
-.theme-navy-dark { background-color: #1a365d; }
-.theme-navy-light { background-color: #2c5282; }
+/* عناصر القائمة */
+.nav-item,
+.nav-item-active {
+    display: block;
+    padding: 12px 18px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.nav-item {
+    color: #ffffffaa;
+}
+
+.nav-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.nav-item-active {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+/* البطاقات */
+.card {
+    padding: 25px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.card-title {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.card-value {
+    font-size: 28px;
+    font-weight: 800;
+    margin-top: 8px;
+}
+
+/* الرسوم */
+.chart-card {
+    padding: 25px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(20px);
+}
+
+.chart-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* التحليل */
+.analysis-card {
+    padding: 25px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.analysis-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.analysis-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* زر الرفع */
+.upload-btn {
+    background: linear-gradient(90deg, #7b2ff7, #4c6ef5);
+    padding: 12px 20px;
+    border-radius: 14px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.upload-btn:hover {
+    opacity: 0.9;
+}
