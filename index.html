@@ -2,139 +2,143 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-    <meta name="theme-color" content="#0f172a">
-    <title>عُنوان | منصة المؤسسات المالية الذكية | الإصدار الاحترافي السحابي</title>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عُنوان | منصة التحليل المالي الذكية — Glass Ultra</title>
+
     <!-- خطوط -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
 
     <!-- أيقونات -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- ملف CSS -->
+    <!-- CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="bg-slate-50 font-['Cairo'] text-slate-800">
+<body class="bg-gradient-to-br from-[#4b1fa3] via-[#5a2fcf] to-[#1b4fff] min-h-screen text-white">
 
-    <!-- تنبيه عدم الاتصال -->
-    <div id="offline-toast" class="hidden fixed bottom-5 right-5 bg-red-600 text-white px-6 py-3 rounded-lg shadow-2xl z-50 flex items-center gap-3">
-        <i class="fas fa-wifi-slash"></i>
-        <span>أنت تعمل حالياً دون اتصال بالإنترنت. قد لا تعمل بعض الرسوم البيانية بشكل صحيح.</span>
-    </div>
+    <!-- طبقة زجاجية عامة -->
+    <div class="absolute inset-0 backdrop-blur-2xl bg-white/5"></div>
 
-    <!-- تنبيه الأخطاء -->
-    <div id="error-toast" class="hidden fixed bottom-5 left-5 bg-amber-500 text-white px-6 py-3 rounded-lg shadow-2xl z-50 flex items-center gap-3">
-        <i class="fas fa-triangle-exclamation"></i>
-        <span id="error-message">حدث خطأ غير متوقع.</span>
-    </div>
-
-    <div class="min-h-screen flex flex-col md:flex-row">
+    <!-- المحتوى -->
+    <div class="relative z-10 flex">
 
         <!-- الشريط الجانبي -->
-        <aside class="w-full md:w-64 bg-slate-900 text-white p-5 flex flex-col justify-between">
-            <div>
-                <div class="flex items-center gap-3 mb-8 px-2">
-                    <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-chart-line text-white"></i>
-                    </div>
-                    <span class="text-xl font-bold tracking-wide">عُنوان الذكية</span>
-                </div>
+        <aside class="w-72 min-h-screen p-6 glass-ultra border-r border-white/10">
+            <h1 class="text-2xl font-bold mb-10 tracking-wide flex items-center gap-3">
+                <i class="fas fa-gem text-purple-300"></i>
+                عُنوان الذكية
+            </h1>
 
-                <nav class="space-y-2 text-sm">
-                    <a class="flex items-center gap-3 px-4 py-3 bg-blue-600 text-white rounded-lg cursor-pointer">
-                        <i class="fas fa-th-large"></i> لوحة التحكم
-                    </a>
-                    <a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-lg cursor-pointer">
-                        <i class="fas fa-file-invoice-dollar"></i> التقارير المالية
-                    </a>
-                    <a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-lg cursor-pointer">
-                        <i class="fas fa-database"></i> إدارة البيانات
-                    </a>
-                </nav>
-            </div>
+            <nav class="space-y-3">
+                <a class="nav-item-active"><i class="fas fa-chart-line"></i> لوحة التحكم</a>
+                <a class="nav-item"><i class="fas fa-file-invoice-dollar"></i> التقارير المالية</a>
+                <a class="nav-item"><i class="fas fa-database"></i> إدارة البيانات</a>
+            </nav>
 
-            <div class="pt-5 border-t border-slate-800 text-xs text-slate-500 text-center">
-                الإصدار الاحترافي السحابي v2.1
+            <div class="absolute bottom-6 text-xs text-white/60">
+                الإصدار: Enterprise Pro Max — Glass Ultra
             </div>
         </aside>
 
         <!-- المحتوى الرئيسي -->
-        <main class="flex-1 p-6 md:p-10 space-y-6">
+        <main class="flex-1 p-10 space-y-10">
 
             <!-- الهيدر -->
-            <header class="border-b border-slate-200 pb-5">
-                <h1 class="text-3xl font-extrabold text-slate-900">لوحة المراقبة المالية الذكية</h1>
-                <p class="text-slate-500 text-sm mt-1">قم برفع ملفات البيانات واستعراض التحليلات المالية المتقدمة فوراً</p>
-                <p id="last-update" class="text-xs text-slate-400 mt-1">لا توجد بيانات محفوظة بعد</p>
+            <header class="glass-ultra p-6 rounded-2xl border border-white/10 shadow-xl">
+                <h2 class="text-3xl font-extrabold">لوحة التحليل المالي الذكية</h2>
+                <p class="text-white/70 mt-1">قم برفع ملف Excel أو CSV لتحليل بياناتك فوراً</p>
+                <p id="last-update" class="text-white/50 text-sm mt-1">لا توجد بيانات بعد</p>
 
-                <div class="mt-4">
-                    <label class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-lg cursor-pointer shadow-sm font-medium text-sm w-fit">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        <span>رفع ملف Excel / CSV</span>
-                        <input type="file" id="excel-uploader" accept=".xlsx, .xls, .csv" class="hidden">
-                    </label>
-                </div>
+                <label class="upload-btn mt-5">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    رفع ملف Excel / CSV
+                    <input type="file" id="excel-uploader" accept=".xlsx,.xls,.csv" class="hidden">
+                </label>
             </header>
 
             <!-- البطاقات -->
-            <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                <div class="bg-white p-6 rounded-xl border shadow-sm flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-slate-500">إجمالي الإيرادات</p>
-                        <h3 id="total-revenues" class="text-2xl font-bold mt-1">0.00 ر.س</h3>
-                    </div>
-                    <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center text-xl">
-                        <i class="fas fa-wallet"></i>
-                    </div>
+            <section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+                <div class="card">
+                    <p class="card-title">إجمالي الإيرادات</p>
+                    <h3 id="total-revenues" class="card-value">0.00 ر.س</h3>
                 </div>
 
-                <div class="bg-white p-6 rounded-xl border shadow-sm flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-slate-500">إجمالي المصروفات</p>
-                        <h3 id="total-expenses" class="text-2xl font-bold mt-1">0.00 ر.س</h3>
-                    </div>
-                    <div class="w-12 h-12 bg-rose-50 text-rose-600 rounded-full flex items-center justify-center text-xl">
-                        <i class="fas fa-receipt"></i>
-                    </div>
+                <div class="card">
+                    <p class="card-title">إجمالي المصروفات</p>
+                    <h3 id="total-expenses" class="card-value">0.00 ر.س</h3>
                 </div>
 
-                <div class="bg-white p-6 rounded-xl border shadow-sm flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-slate-500">صافي الأرباح</p>
-                        <h3 id="net-profit" class="text-2xl font-bold mt-1">0.00 ر.س</h3>
-                    </div>
-                    <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center text-xl">
-                        <i class="fas fa-scale-balanced"></i>
-                    </div>
+                <div class="card">
+                    <p class="card-title">صافي الربح</p>
+                    <h3 id="net-profit" class="card-value">0.00 ر.س</h3>
                 </div>
 
-                <div class="bg-white p-6 rounded-xl border shadow-sm flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-slate-500">هامش الربح</p>
-                        <h3 id="profit-margin" class="text-2xl font-bold mt-1">0%</h3>
-                    </div>
-                    <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-full flex items-center justify-center text-xl">
-                        <i class="fas fa-percent"></i>
-                    </div>
+                <div class="card">
+                    <p class="card-title">هامش الربح</p>
+                    <h3 id="profit-margin" class="card-value">0%</h3>
                 </div>
             </section>
 
             <!-- الرسوم البيانية -->
-            <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div class="bg-white p-5 rounded-xl border shadow-sm lg:col-span-2">
-                    <h4 class="text-base font-bold mb-4 flex items-center gap-2">
-                        <i class="fas fa-chart-bar text-blue-600"></i>
-                        تحليل الإيرادات الشهري
-                    </h4>
-                    <div class="relative h-72">
-                        <canvas id="revenueChart"></canvas>
+            <section class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+                <div class="chart-card xl:col-span-2">
+                    <h4 class="chart-title"><i class="fas fa-chart-bar"></i> تحليل الإيرادات الشهري</h4>
+                    <canvas id="revenueChart" class="h-72"></canvas>
+                </div>
+
+                <div class="chart-card">
+                    <h4 class="chart-title"><i class="fas fa-chart-pie"></i> توزيع المصروفات</h4>
+                    <canvas id="expenseChart" class="h-72"></canvas>
+                </div>
+            </section>
+
+            <!-- التحليل المالي -->
+            <section class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                <div class="analysis-card">
+                    <h4 class="analysis-title"><i class="fas fa-magnifying-glass-chart"></i> مؤشرات التحليل المالي</h4>
+
+                    <div class="analysis-item">
+                        <span>نسبة المصروفات إلى الإيرادات</span>
+                        <span id="expense-ratio">0%</span>
+                    </div>
+
+                    <div class="analysis-item">
+                        <span>نسبة صافي الربح</span>
+                        <span id="net-profit-ratio">0%</span>
+                    </div>
+
+                    <div class="analysis-item">
+                        <span>نقطة التعادل</span>
+                        <span id="break-even-status">غير متحقق</span>
+                    </div>
+
+                    <div class="analysis-item">
+                        <span>التقييم العام</span>
+                        <span id="financial-health">غير متوفر</span>
                     </div>
                 </div>
 
+                <div class="analysis-card">
+                    <h4 class="analysis-title"><i class="fas fa-list-check"></i> ملخص تنفيذي</h4>
+                    <ul id="analysis-summary" class="list-disc pr-5 space-y-1 text-white/80">
+                        <li>لم يتم تحميل بيانات بعد.</li>
+                    </ul>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- مكتبات -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <!-- JS -->
+    <script src="script.js"></script>
+
+</body>
+</html>
