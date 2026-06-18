@@ -8,9 +8,8 @@ document.addEventListener("DOMContentLoaded", () => {
     initNetworkMonitor();
     initCharts();
     initAuthSystem();
-    checkLoginStatus(); // التحقق إذا كان المستخدم مسجلاً لدخوله مسبقاً
+    checkLoginStatus(); 
     
-    // ربط مستمع الحدث لالتقاط ميزان المراجعة المرفوع
     const uploader = document.getElementById('excel-uploader');
     if (uploader) {
         uploader.addEventListener('change', handleFileUpload);
@@ -29,22 +28,16 @@ function initAuthSystem() {
     const loginForm = document.getElementById('login-form');
     const logoutBtn = document.getElementById('logout-btn');
 
-    // فتح شباك تسجيل الدخول
     if (openLoginBtn) openLoginBtn.addEventListener('click', () => loginModal.classList.remove('hidden'));
     if (heroActionBtn) heroActionBtn.addEventListener('click', () => loginModal.classList.remove('hidden'));
-    
-    // إغلاق شباك تسجيل الدخول
     if (closeLoginBtn) closeLoginBtn.addEventListener('click', () => loginModal.classList.add('hidden'));
 
-    // معالجة تقديم نموذج الدخول
     if (loginForm) {
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const user = document.getElementById('username').value.trim().toLowerCase();
-            const pass = document.getElementById('password').value;
             const errorEl = document.getElementById('login-error');
 
-            // يمكنك تغيير بيانات الدخول هنا (تم تعيين اسم المستخدم: anas)
             if (user === 'anas' || user === 'admin') {
                 localStorage.setItem('isLoggedIn', 'true');
                 localStorage.setItem('sessionUser', user);
@@ -57,7 +50,6 @@ function initAuthSystem() {
         });
     }
 
-    // تسجيل الخروج والعودة للصفحة التعريفية
     if (logoutBtn) {
         logoutBtn.addEventListener('click', () => {
             localStorage.removeItem('isLoggedIn');
@@ -67,7 +59,6 @@ function initAuthSystem() {
     }
 }
 
-// فحص حالة الجلسة وتغيير محتوى الواجهة فوراً
 function checkLoginStatus() {
     const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
     const landingPage = document.getElementById('landing-page');
@@ -78,14 +69,14 @@ function checkLoginStatus() {
         if (landingPage) landingPage.classList.add('hidden');
         if (dashboardPage) dashboardPage.classList.remove('hidden');
         if (userDisplay) userDisplay.innerText = `مرحباً، ${localStorage.getItem('sessionUser')}`;
-        loadSavedData(); // جلب أي بيانات إكسيل تم رفعها سابقاً لتظل ثابتة
+        loadSavedData(); 
     } else {
         if (dashboardPage) dashboardPage.classList.add('hidden');
         if (landingPage) landingPage.classList.remove('hidden');
     }
 }
 
-// 3. مراقبة حالة اتصال المستخدم بالإنترنت لمنع توقف المكتبات الخارجية
+// 3. مراقبة حالة اتصال المستخدم بالإنترنت
 function initNetworkMonitor() {
     const toast = document.getElementById('offline-toast');
     if (!toast) return;
@@ -94,7 +85,7 @@ function initNetworkMonitor() {
     if (!navigator.onLine) toast.classList.remove('hidden');
 }
 
-// 4. تهيئة الرسوم البيانية بهياكل مالية فارغة حتى يتم رفع الملف
+// 4. تهيئة الرسوم البيانية بهياكل مالية فارغة
 function initCharts() {
     const ctxRev = document.getElementById('revenueChart');
     if (ctxRev) {
@@ -121,7 +112,7 @@ function initCharts() {
     }
 }
 
-// 5. قراءة ملف ميزان المراجعة المرفوع وتحويله إلى كائن برمجى (JSON)
+// 5. قراءة ملف ميزان المراجعة المرفوع
 function handleFileUpload(e) {
     const file = e.target.files[0];
     if (!file) return;
@@ -133,42 +124,52 @@ function handleFileUpload(e) {
         
         const firstSheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[firstSheetName];
-        const jsonData = XLSX.utils.sheet_to_json(worksheet);
+        
+        // قراءة الملف كصفوف ومصفوفات لضمان عدم الاعتماد على العناوين النصية فقط
+        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
         
         processFinancialData(jsonData);
     };
     reader.readAsArrayBuffer(file);
 }
 
-// 6. الفرز المالي الذكي لميزان المراجعة وتوليد القوائم والميزانية العمومية
-function processFinancialData(data) {
+// 6. الفرز المالي الشامل (محدث بالكامل ليتوافق مع أي هيكل ميزان مراجعة)
+function processFinancialData(matrixData) {
     let totalRevenue = 0;     
     let totalExpenses = 0;    
     let totalAssets = 0;      
     let totalLiabilities = 0; 
     let totalEquity = 0;      
 
-    data.forEach(row => {
-        const accountName = (row['اسم الحساب'] || row['الحساب'] || row['اسم_الحساب'] || row['Account'] || row['Account Name'] || '').toString();
-        const debit = parseFloat(row['الرصيد المدين'] || row['مدين'] || row['المدين'] || row['Debit'] || row['debit'] || 0);
-        const credit = parseFloat(row['الرصيد الدائن'] || row['دائن'] || row['الدائن'] || row['Credit'] || row['credit'] || 0);
+    // تخطي السطر الأول (العناوين) والبدء في فحص البيانات الفعلية
+    for (let i = 1; i < matrixData.length; i++) {
+        const row = matrixData[i];
+        if (!row || row.length < 2) continue;
 
+        // جلب اسم الحساب، والمدين، والدائن بناءً على موقعهم في الصف الذاتي
+        const accountName = (row[0] || '').toString().trim();
+        const debit = parseFloat(row[1] || 0);
+        const credit = parseFloat(row[2] || 0);
+
+        if (!accountName) continue;
+
+        // قواعد التصنيف المرنة بناء على الكلمات المفتاحية الأكثر شيوعاً
         if (accountName.includes('إيراد') || accountName.includes('مبيعات') || accountName.includes('Revenue') || accountName.includes('Sales')) {
-            totalRevenue += credit; 
+            totalRevenue += (credit > 0 ? credit : debit); 
         } 
-        else if (accountName.includes('مصروف') || accountName.includes('رواتب') || accountName.includes('إيجار') || accountName.includes('تكلفة') || accountName.includes('تكاليف') || accountName.includes('Expenses') || accountName.includes('Cost')) {
+        else if (accountName.includes('مصروف') || accountName.includes('رواتب') || accountName.includes('إيجار') || accountName.includes('تكلفة') || accountName.includes('تكاليف') || accountName.includes('استهلاك') || accountName.includes('Expenses') || accountName.includes('Cost')) {
             totalExpenses += debit; 
         }
-        else if (accountName.includes('نقدية') || accountName.includes('بنك') || accountName.includes('عملاء') || accountName.includes('أصول') || accountName.includes('ثابتة') || accountName.includes('Assets') || accountName.includes('Cash')) {
+        else if (accountName.includes('نقدية') || accountName.includes('بنك') || accountName.includes('عملاء') || accountName.includes('أصول') || accountName.includes('ثابتة') || accountName.includes('مخزون') || accountName.includes('Assets') || accountName.includes('Cash')) {
             totalAssets += (debit - credit); 
         }
-        else if (accountName.includes('موردين') || accountName.includes('قروض') || accountName.includes('التزامات') || accountName.includes('خصوم') || accountName.includes('Liabilities') || accountName.includes('Payable')) {
+        else if (accountName.includes('موردين') || accountName.includes('قروض') || accountName.includes('التزامات') || accountName.includes('خصوم') || accountName.includes('دائنون') || accountName.includes('Liabilities') || accountName.includes('Payable')) {
             totalLiabilities += (credit - debit); 
         }
-        else if (accountName.includes('رأس المال') || accountName.includes('ملكية') || accountName.includes('حقوق') || accountName.includes('Equity') || accountName.includes('Capital')) {
+        else if (accountName.includes('رأس المال') || accountName.includes('ملكية') || accountName.includes('حقوق') || accountName.includes('أرباح مبقاة') || accountName.includes('Equity') || accountName.includes('Capital')) {
             totalEquity += (credit - debit); 
         }
-    });
+    }
 
     const netProfit = totalRevenue - totalExpenses;
     const finalEquity = totalEquity + netProfit;
@@ -177,8 +178,8 @@ function processFinancialData(data) {
         totalRev: totalRevenue,
         totalExp: totalExpenses,
         netProfit: netProfit,
-        assets: totalAssets,
-        liabilities: totalLiabilities,
+        assets: Math.abs(totalAssets),
+        liabilities: Math.abs(totalLiabilities),
         equity: finalEquity
     };
 
