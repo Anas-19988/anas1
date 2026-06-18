@@ -5,7 +5,10 @@ document.addEventListener("DOMContentLoaded", () => {
     loadSavedData();
     
     // ربط مستمع الحدث لالتقاط ميزان المراجعة المرفوع
-    document.getElementById('excel-uploader').addEventListener('change', handleFileUpload);
+    const uploader = document.getElementById('excel-uploader');
+    if (uploader) {
+        uploader.addEventListener('change', handleFileUpload);
+    }
 });
 
 let revenueChartInstance = null;
@@ -14,6 +17,7 @@ let expenseChartInstance = null;
 // 1. مراقبة حالة اتصال المستخدم بالإنترنت لمنع توقف المكتبات
 function initNetworkMonitor() {
     const toast = document.getElementById('offline-toast');
+    if (!toast) return;
     window.addEventListener('offline', () => toast.classList.remove('hidden'));
     window.addEventListener('online', () => toast.classList.add('hidden'));
     if (!navigator.onLine) toast.classList.remove('hidden');
@@ -21,25 +25,29 @@ function initNetworkMonitor() {
 
 // 2. تهيئة الرسوم البيانية بهياكل مالية فارغة حتى يتم رفع الملف
 function initCharts() {
-    const ctxRev = document.getElementById('revenueChart').getContext('2d');
-    revenueChartInstance = new Chart(ctxRev, {
-        type: 'bar',
-        data: { 
-            labels: ['إجمالي الإيرادات', 'إجمالي المصروفات', 'صافي الربح'], 
-            datasets: [{ label: 'قائمة الدخل (ر.س)', data: [0, 0, 0], backgroundColor: ['#2563eb', '#e11d48', '#10b981'] }] 
-        },
-        options: { responsive: true, maintainAspectRatio: false }
-    });
+    const ctxRev = document.getElementById('revenueChart');
+    if (ctxRev) {
+        revenueChartInstance = new Chart(ctxRev.getContext('2d'), {
+            type: 'bar',
+            data: { 
+                labels: ['إجمالي الإيرادات', 'إجمالي المصروفات', 'صافي الربح'], 
+                datasets: [{ label: 'قائمة الدخل (ر.س)', data: [0, 0, 0], backgroundColor: ['#2563eb', '#e11d48', '#10b981'] }] 
+            },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+    }
 
-    const ctxExp = document.getElementById('expenseChart').getContext('2d');
-    expenseChartInstance = new Chart(ctxExp, {
-        type: 'doughnut',
-        data: { 
-            labels: ['الأصول', 'الالتزامات', 'حقوق الملكية'], 
-            datasets: [{ data: [0, 0, 0], backgroundColor: ['#06b6d4', '#f59e0b', '#7c3aed'] }] 
-        },
-        options: { responsive: true, maintainAspectRatio: false }
-    });
+    const ctxExp = document.getElementById('expenseChart');
+    if (ctxExp) {
+        expenseChartInstance = new Chart(ctxExp.getContext('2d'), {
+            type: 'doughnut',
+            data: { 
+                labels: ['الأصول', 'الالتزامات', 'حقوق الملكية'], 
+                datasets: [{ data: [0, 0, 0], backgroundColor: ['#06b6d4', '#f59e0b', '#7c3aed'] }] 
+            },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+    }
 }
 
 // 3. قراءة ملف ميزان المراجعة المرفوع وتحويله إلى كائن برمجى (JSON)
@@ -73,8 +81,8 @@ function processFinancialData(data) {
     data.forEach(row => {
         // فحص مسميات الأعمدة الشائعة في برامج المحاسبة وموازين المراجعة
         const accountName = (row['اسم الحساب'] || row['الحساب'] || row['Account'] || '').toString();
-        const debit = parseFloat(row['الرصيد المدين'] || row['مدين'] || row['Debit'] || 0);
-        const credit = parseFloat(row['الرصيد الدائن'] || row['دائن'] || row['Credit'] || 0);
+        const debit = parseFloat(row['الرصيد المدين'] || row['مدين'] || row['المدين'] || row['Debit'] || 0);
+        const credit = parseFloat(row['الرصيد الدائن'] || row['دائن'] || row['الدائن'] || row['Credit'] || 0);
 
         // التصنيف الذكي بناءً على الهيكل المحاسبي للميزان
         if (accountName.includes('إيراد') || accountName.includes('مبيعات') || accountName.includes('Revenue') || accountName.includes('Sales')) {
@@ -83,13 +91,13 @@ function processFinancialData(data) {
         else if (accountName.includes('مصروف') || accountName.includes('رواتب') || accountName.includes('إيجار') || accountName.includes('تكلفة') || accountName.includes('Expenses') || accountName.includes('Cost')) {
             totalExpenses += debit; 
         }
-        else if (accountName.includes('نقدية') || accountName.includes('بنك') || accountName.includes('عملاء') || accountName.includes('أصول') || accountName.includes('Assets') || accountName.includes('Cash')) {
+        else if (accountName.includes('نقدية') || accountName.includes('بنك') || accountName.includes('عملاء') || accountName.includes('أصول') || accountName.includes('ثابتة') || accountName.includes('Assets') || accountName.includes('Cash')) {
             totalAssets += (debit - credit); 
         }
         else if (accountName.includes('موردين') || accountName.includes('قروض') || accountName.includes('التزامات') || accountName.includes('خصوم') || accountName.includes('Liabilities') || accountName.includes('Payable')) {
             totalLiabilities += (credit - debit); 
         }
-        else if (accountName.includes('رأس المال') || accountName.includes('ملكية') || accountName.includes('Equity') || accountName.includes('Capital')) {
+        else if (accountName.includes('رأس المال') || accountName.includes('ملكية') || accountName.includes('حقوق') || accountName.includes('Equity') || accountName.includes('Capital')) {
             totalEquity += (credit - debit); 
         }
     });
@@ -109,7 +117,7 @@ function processFinancialData(data) {
         equity: finalEquity
     };
 
-    // حفظ المخرجات في ذاكرة المتصفح للرجوع إليها لاحقاً بدلاً من قواعد البيانات التقليدية
+    // حفظ المخرجات في ذاكرة المتصفح للرجوع إليها لاحقاً
     localStorage.setItem('financialData', JSON.stringify(financialSummary));
 
     // تحديث الأرقام والرسوم البيانية المباشرة
@@ -123,25 +131,28 @@ function loadSavedData() {
     if (saved) {
         const data = JSON.parse(saved);
         updateUI(data);
-        // تأخير بسيط لضمان تهيئة مخططات الـ Chart.js قبل ضخ البيانات المحفوظة بها
         setTimeout(() => updateChartsDynamically(data), 200);
     }
 }
 
 // 6. تحديث الأرقام والنصوص في الواجهة والميزانية المتوازنة
 function updateUI(data) {
-    document.getElementById('total-revenues').innerText = data.totalRev.toLocaleString('ar-SA') + ' ر.س';
-    document.getElementById('total-expenses').innerText = data.totalExp.toLocaleString('ar-SA') + ' ر.س';
-    document.getElementById('net-profit').innerText = data.netProfit.toLocaleString('ar-SA') + ' ر.س';
-    
-    // تحديث خانات الميزانية المتوازنة
-    document.getElementById('balance-assets').innerText = data.assets.toLocaleString('ar-SA') + ' ر.س';
-    document.getElementById('balance-eq-liab').innerText = (data.liabilities + data.equity).toLocaleString('ar-SA') + ' ر.س';
+    const revEl = document.getElementById('total-revenues');
+    const expEl = document.getElementById('total-expenses');
+    const profEl = document.getElementById('net-profit');
+    const assetEl = document.getElementById('balance-assets');
+    const eqLiabEl = document.getElementById('balance-eq-liab');
+
+    if (revEl) revEl.innerText = data.totalRev.toLocaleString('ar-SA') + ' ر.س';
+    if (expEl) expEl.innerText = data.totalExp.toLocaleString('ar-SA') + ' ر.س';
+    if (profEl) profEl.innerText = data.netProfit.toLocaleString('ar-SA') + ' ر.س';
+    if (assetEl) assetEl.innerText = data.assets.toLocaleString('ar-SA') + ' ر.س';
+    if (eqLiabEl) eqLiabEl.innerText = (data.liabilities + data.equity).toLocaleString('ar-SA') + ' ر.س';
 }
 
 // 7. ضخ البيانات الجديدة داخل المخططات الرسومية لإعادة رسمها ديناميكياً
 function updateChartsDynamically(summary) {
-    if(revenueChartInstance && expenseChartInstance) {
+    if (revenueChartInstance && expenseChartInstance) {
         revenueChartInstance.data.datasets[0].data = [summary.totalRev, summary.totalExp, summary.netProfit];
         revenueChartInstance.update();
 
