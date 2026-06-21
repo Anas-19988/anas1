@@ -3,142 +3,269 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>عُنوان | منصة التحليل المالي الذكية — Glass Ultra</title>
-
-    <!-- خطوط -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-
-    <!-- أيقونات -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-    <!-- Tailwind -->
+    <title>مؤشرات للخدمات المهنية | منصة التقارير الذكية</title>
+    
+    <!-- خطوط جوجل والأيقونات المعتمدة للهوية المماثلة للصورة -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- مكتبة التنسيق Tailwind CSS المتقدمة -->
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif !important;
+        }
+        /* الألوان المعتمدة للهوية البصرية الجديدة */
+        .brand-dark { background-color: #112233; }
+        .brand-text-dark { color: #112233; }
+        .brand-primary { background-color: #2ec4b6; }
+        .brand-primary-hover { background-color: #25a195; }
+        .brand-text-primary { color: #2ec4b6; }
+        .border-brand-primary { border-color: #2ec4b6; }
+        
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    </style>
 </head>
+<body class="bg-slate-50 text-slate-800">
 
-<body class="bg-gradient-to-br from-[#4b1fa3] via-[#5a2fcf] to-[#1b4fff] min-h-screen text-white">
+    <!-- شريط تنبيه عند انقطاع الإنترنت -->
+    <div id="offline-toast" class="hidden fixed bottom-5 right-5 bg-red-600 text-white px-6 py-3 rounded-lg shadow-2xl z-50 flex items-center gap-3 animate-bounce">
+        <i class="fas fa-wifi-slash"></i>
+        <span>أنت تعمل حالياً دون اتصال بالإنترنت. قد لا تعمل بعض الميزات بشكل صحيح.</span>
+    </div>
 
-    <!-- طبقة زجاجية عامة -->
-    <div class="absolute inset-0 backdrop-blur-2xl bg-white/5"></div>
-
-    <!-- المحتوى -->
-    <div class="relative z-10 flex">
-
-        <!-- الشريط الجانبي -->
-        <aside class="w-72 min-h-screen p-6 glass-ultra border-r border-white/10">
-            <h1 class="text-2xl font-bold mb-10 tracking-wide flex items-center gap-3">
-                <i class="fas fa-gem text-purple-300"></i>
-                عُنوان الذكية
-            </h1>
-
-            <nav class="space-y-3">
-                <a class="nav-item-active"><i class="fas fa-chart-line"></i> لوحة التحكم</a>
-                <a class="nav-item"><i class="fas fa-file-invoice-dollar"></i> التقارير المالية</a>
-                <a class="nav-item"><i class="fas fa-database"></i> إدارة البيانات</a>
-            </nav>
-
-            <div class="absolute bottom-6 text-xs text-white/60">
-                الإصدار: Enterprise Pro Max — Glass Ultra
+    <!-- ==================================================== -->
+    <!-- القسم الأول: الواجهة التعريفية للمؤسسة (Landing Page) -->
+    <!-- ==================================================== -->
+    <div id="landing-page" class="min-h-screen flex flex-col justify-between">
+        <!-- شريط التنقل العلوي -->
+        <header class="bg-white shadow-sm px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <button id="open-login-btn" class="brand-primary hover:brand-primary-hover text-white px-5 py-2 rounded-lg font-bold shadow-sm transition-all text-sm">
+                    <i class="fas fa-sign-in-alt ml-2"></i>تسجيل الدخول
+                </button>
             </div>
+            <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
+                <a href="#" class="hover:brand-text-primary transition-colors">اتصل بنا</a>
+                <a href="#" class="hover:brand-text-primary transition-colors">الوظائف والتدريبات</a>
+                <a href="#" class="hover:brand-text-primary transition-colors">معلومات عنا</a>
+                <a href="#" class="hover:brand-text-primary transition-colors">قيم</a>
+                <a href="#" class="hover:brand-text-primary transition-colors">خدماتنا</a>
+                <a href="#" class="brand-text-primary font-bold">بيت</a>
+            </nav>
+            <!-- الشعار التخيلي المستوحى من الصورة -->
+            <div class="flex items-center gap-2">
+                <div class="text-right">
+                    <span class="font-black text-xl tracking-wider block brand-text-dark">INDICATORS</span>
+                    <span class="text-xs text-slate-400 block -mt-1">professional services</span>
+                </div>
+                <div class="w-10 h-10 brand-dark text-white rounded-lg flex items-center justify-center font-black text-xl shadow-md rotate-45">
+                    <i class="fas fa-chart-line -rotate-45 text-emerald-400"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- القسم الرئيسي (البطل) -->
+        <main class="flex-1 max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <!-- الصورة الهندسية التعبيرية في اليسار -->
+            <div class="flex justify-center order-last lg:order-first">
+                <div class="relative w-80 h-80 md:w-96 md:h-96 flex items-center justify-center">
+                    <div class="absolute inset-0 brand-dark rounded-3xl rotate-12 opacity-95 shadow-2xl flex items-center justify-center text-white p-8"></div>
+                    <div class="absolute inset-0 brand-primary rounded-3xl -rotate-6 opacity-90 shadow-xl flex items-center justify-center text-white p-8">
+                        <div class="rotate-6 text-center space-y-4">
+                            <i class="fas fa-balance-scale text-6xl text-white"></i>
+                            <p class="font-bold text-lg">تحليلات مالية ومحاسبية متقدمة بقوة الذكاء الاصطناعي</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- النصوص التعرفية في اليمين -->
+            <div class="text-right space-y-6">
+                <h2 class="text-3xl md:text-5xl font-black brand-text-dark leading-tight">للمؤشرات خدمات مهنية</h2>
+                <p class="text-slate-600 text-lg leading-relaxed max-w-xl">
+                    تأسست شركة إنديكاتورز للخدمات المهنية لتكون واحدة من أفضل الشركات المهنية في المملكة العربية السعودية والتي تضم نخبة من المحاسبين والاستشاريين المعتمدين المتخصصين في مختلف المجالات المالية والإدارية.
+                </p>
+                <div class="pt-4">
+                    <button id="hero-action-btn" class="brand-primary hover:brand-primary-hover text-white px-8 py-3.5 rounded-xl text-base font-bold shadow-md transition-all">
+                        اطلب استشارة مجانية
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- قسم الأهداف والمهمة والرؤية (أسفل الصفحة التعريفية) -->
+        <section class="bg-slate-100 py-12 px-6 border-t border-slate-200">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-right">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 space-y-3">
+                    <div class="w-12 h-12 brand-primary text-white rounded-full flex items-center justify-center text-xl shadow-sm"><i class="fas fa-bullseye"></i></div>
+                    <h4 class="text-xl font-bold brand-text-dark">مهمتنا</h4>
+                    <p class="text-slate-500 text-sm leading-relaxed">نسعى جاهدين لنكون الخيار الأمثل لتقديم استشارات مهنية دقيقة لتعزيز استدامة علاقتنا الاستراتيجية وتوفير خدمات ذات قيمة مضافة لعملائنا.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 space-y-3">
+                    <div class="w-12 h-12 brand-primary text-white rounded-full flex items-center justify-center text-xl shadow-sm"><i class="fas fa-eye"></i></div>
+                    <h4 class="text-xl font-bold brand-text-dark">رؤيتنا</h4>
+                    <p class="text-slate-500 text-sm leading-relaxed">أن نكون من أبرز الشركات المهنية الوطنية في مجال الاستشارات المهنية وتقديم خدمات التدقيق بمختلف أنواعها في المملكة والشرق الأوسط وفقاً لأعلى معايير الجودة.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 space-y-3">
+                    <div class="w-12 h-12 brand-primary text-white rounded-full flex items-center justify-center text-xl shadow-sm"><i class="fas fa-gem"></i></div>
+                    <h4 class="text-xl font-bold brand-text-dark">أهدافنا</h4>
+                    <p class="text-slate-500 text-sm leading-relaxed">هدفنا هو الحفاظ على جسر الثقة الذي يمتد دائماً بيننا وبين عملائنا من خلال تقديم خدمات ذات قيمة مضافة لهم بالإضافة إلى إكمال خدماتنا وفقاً لأعلى المعايير المهنية.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- نافذة تسجيل الدخول المنبثقة (Login Modal) -->
+    <div id="login-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative animate-fade-in">
+            <button id="close-login-btn" class="absolute top-4 left-4 text-slate-400 hover:text-slate-600 text-xl"><i class="fas fa-times"></i></button>
+            <div class="text-center space-y-2 mb-6">
+                <h3 class="text-2xl font-black brand-text-dark">مرحباً بك مجدداً</h3>
+                <p class="text-slate-400 text-sm">سجل دخولك للوصول إلى منصة توليد القوائم</p>
+            </div>
+            <form id="login-form" class="space-y-4 text-right">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-600 mb-1">اسم المستخدم</label>
+                    <input type="text" id="username" required placeholder="anas" class="w-full px-4 py-2.5 rounded-lg border border-slate-200 focus:outline-none focus:border-brand-primary text-left font-bold">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-slate-600 mb-1">كلمة المرور</label>
+                    <input type="password" id="password" required placeholder="••••••••" class="w-full px-4 py-2.5 rounded-lg border border-slate-200 focus:outline-none focus:border-brand-primary text-left">
+                </div>
+                <div id="login-error" class="hidden text-red-500 text-xs font-bold bg-red-50 p-2.5 rounded-lg text-center">بيانات الدخول غير صحيحة، جرب اسم المستخدم: anas</div>
+                <button type="submit" class="w-full brand-primary hover:brand-primary-hover text-white py-3 rounded-lg font-bold shadow-md transition-all mt-2">دخول النظام</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================================================== -->
+    <!-- القسم الثاني: لوحة التحكم وتوليد القوائم المالية -->
+    <!-- ==================================================== -->
+    <div id="dashboard-page" class="hidden min-h-screen flex flex-col md:flex-row">
+        <!-- القائمة الجانبية المستجيبة -->
+        <aside class="w-full md:w-64 brand-dark text-white p-5 flex flex-col justify-between order-first md:order-last">
+            <div>
+                <div class="flex items-center justify-end gap-3 mb-8 px-2">
+                    <div class="text-right">
+                        <span class="text-base font-bold tracking-wide block">لوحة المؤشرات</span>
+                        <span id="user-display-name" class="text-xs text-emerald-400 block">مرحباً، أنس</span>
+                    </div>
+                    <div class="w-8 h-8 brand-primary rounded-lg flex items-center justify-center shadow-md">
+                        <i class="fas fa-chart-line text-white"></i>
+                    </div>
+                </div>
+                <nav class="space-y-2 text-right">
+                    <a href="#" class="flex items-center justify-end gap-3 px-4 py-3 brand-primary text-white rounded-lg transition-all">
+                        <span>لوحة التحكم</span><i class="fas fa-th-large"></i>
+                    </a>
+                    <a href="#" class="flex items-center justify-end gap-3 px-4 py-3 text-slate-400 hover:bg-slate-900 hover:text-white rounded-lg transition-all">
+                        <span>التقارير المالية</span><i class="fas fa-file-invoice-dollar"></i>
+                    </a>
+                    <button id="logout-btn" class="w-full flex items-center justify-end gap-3 px-4 py-3 text-rose-400 hover:bg-rose-950/30 rounded-lg transition-all mt-6 font-bold">
+                        <span>تسجيل الخروج</span><i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </nav>
+            </div>
+            <div class="pt-5 border-t border-slate-900 text-xs text-slate-500 text-center">مؤشرات الفئة الاحترافية v3.5</div>
         </aside>
 
-        <!-- المحتوى الرئيسي -->
-        <main class="flex-1 p-10 space-y-10">
-
-            <!-- الهيدر -->
-            <header class="glass-ultra p-6 rounded-2xl border border-white/10 shadow-xl">
-                <h2 class="text-3xl font-extrabold">لوحة التحليل المالي الذكية</h2>
-                <p class="text-white/70 mt-1">قم برفع ملف Excel أو CSV لتحليل بياناتك فوراً</p>
-                <p id="last-update" class="text-white/50 text-sm mt-1">لا توجد بيانات بعد</p>
-
-                <label class="upload-btn mt-5">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                    رفع ملف Excel / CSV
-                    <input type="file" id="excel-uploader" accept=".xlsx,.xls,.csv" class="hidden">
-                </label>
+        <!-- المحتوى الرئيسي للمنصة المالية -->
+        <main class="flex-1 p-6 md:p-10 space-y-6">
+            <!-- هيدر رفع ميزان المراجعة -->
+            <header class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-200 pb-5">
+                <div class="flex flex-col items-start gap-2 w-full md:w-auto">
+                    <label class="flex items-center gap-2 brand-primary hover:brand-primary-hover text-white px-5 py-2.5 rounded-lg cursor-pointer shadow-md font-bold transition-all text-sm w-full md:w-auto justify-center">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <span>رفع ميزان المراجعة (Excel)</span>
+                        <input type="file" id="excel-uploader" accept=".xlsx, .xls, .csv" class="hidden">
+                    </label>
+                </div>
+                <div class="text-right w-full md:w-auto">
+                    <h1 class="text-2xl md:text-3xl font-black brand-text-dark">منصة إنديكاتورز لتوليد التقارير المعتمدة</h1>
+                    <p class="text-slate-500 text-sm mt-1">قم برفع ميزان المراجعة الفعلي لاستخراج الميزانية وقائمة الدخل فوراً</p>
+                </div>
             </header>
 
-            <!-- البطاقات -->
-            <section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-                <div class="card">
-                    <p class="card-title">إجمالي الإيرادات</p>
-                    <h3 id="total-revenues" class="card-value">0.00 ر.س</h3>
+            <!-- صندوق التدقيق والتشخيص التفاعلي والذكي الجديد للمستخدم -->
+            <section id="diagnostic-section" class="bg-slate-900 text-white rounded-xl p-4 border border-slate-800 text-right shadow-inner">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-3">
+                    <span id="diagnostic-indicator" class="w-3 h-3 rounded-full bg-slate-500"></span>
+                    <h4 class="text-xs font-bold text-slate-400 flex items-center gap-2">
+                        <span>شاشة الفحص والتدقيق المباشر لملف الإكسل</span>
+                        <i class="fas fa-terminal"></i>
+                    </h4>
                 </div>
-
-                <div class="card">
-                    <p class="card-title">إجمالي المصروفات</p>
-                    <h3 id="total-expenses" class="card-value">0.00 ر.س</h3>
-                </div>
-
-                <div class="card">
-                    <p class="card-title">صافي الربح</p>
-                    <h3 id="net-profit" class="card-value">0.00 ر.س</h3>
-                </div>
-
-                <div class="card">
-                    <p class="card-title">هامش الربح</p>
-                    <h3 id="profit-margin" class="card-value">0%</h3>
+                <div id="diagnostic-log" class="text-xs font-mono space-y-1.5 text-slate-300 leading-relaxed">
+                    <p class="text-slate-500 italic">انتظار رفع ملف ميزان المراجعة لبدء الفحص والتشخيص المحاسبي...</p>
                 </div>
             </section>
 
-            <!-- الرسوم البيانية -->
-            <section class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-                <div class="chart-card xl:col-span-2">
-                    <h4 class="chart-title"><i class="fas fa-chart-bar"></i> تحليل الإيرادات الشهري</h4>
-                    <canvas id="revenueChart" class="h-72"></canvas>
+            <!-- كروت المؤشرات المالية المستخرجة -->
+            <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 text-right">
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center text-xl"><i class="fas fa-wallet"></i></div>
+                    <div>
+                        <p class="text-sm font-medium text-slate-500">إجمالي الإيرادات</p>
+                        <h3 id="total-revenues" class="text-2xl font-bold brand-text-dark mt-1">0.00 ر.س</h3>
+                    </div>
                 </div>
-
-                <div class="chart-card">
-                    <h4 class="chart-title"><i class="fas fa-chart-pie"></i> توزيع المصروفات</h4>
-                    <canvas id="expenseChart" class="h-72"></canvas>
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div class="w-12 h-12 bg-rose-50 text-rose-600 rounded-full flex items-center justify-center text-xl"><i class="fas fa-receipt"></i></div>
+                    <div>
+                        <p class="text-sm font-medium text-slate-500">إجمالي المصروفات</p>
+                        <h3 id="total-expenses" class="text-2xl font-bold brand-text-dark mt-1">0.00 ر.س</h3>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center text-xl"><i class="fas fa-scale-balanced"></i></div>
+                    <div>
+                        <p class="text-sm font-medium text-slate-500">صافي الأرباح / الخسائر</p>
+                        <h3 id="net-profit" class="text-2xl font-bold brand-text-dark mt-1">0.00 ر.س</h3>
+                    </div>
                 </div>
             </section>
 
-            <!-- التحليل المالي -->
-            <section class="grid grid-cols-1 xl:grid-cols-2 gap-6">
-                <div class="analysis-card">
-                    <h4 class="analysis-title"><i class="fas fa-magnifying-glass-chart"></i> مؤشرات التحليل المالي</h4>
-
-                    <div class="analysis-item">
-                        <span>نسبة المصروفات إلى الإيرادات</span>
-                        <span id="expense-ratio">0%</span>
-                    </div>
-
-                    <div class="analysis-item">
-                        <span>نسبة صافي الربح</span>
-                        <span id="net-profit-ratio">0%</span>
-                    </div>
-
-                    <div class="analysis-item">
-                        <span>نقطة التعادل</span>
-                        <span id="break-even-status">غير متحقق</span>
-                    </div>
-
-                    <div class="analysis-item">
-                        <span>التقييم العام</span>
-                        <span id="financial-health">غير متوفر</span>
-                    </div>
+            <!-- الرسوم والمخططات البيانية التفاعلية -->
+            <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                    <h4 class="text-base font-bold brand-text-dark mb-4 flex items-center justify-end gap-2"><span>هيكل قائمة الدخل المولد</span><i class="fas fa-chart-bar brand-text-primary"></i></h4>
+                    <div class="relative h-72"><canvas id="revenueChart"></canvas></div>
                 </div>
-
-                <div class="analysis-card">
-                    <h4 class="analysis-title"><i class="fas fa-list-check"></i> ملخص تنفيذي</h4>
-                    <ul id="analysis-summary" class="list-disc pr-5 space-y-1 text-white/80">
-                        <li>لم يتم تحميل بيانات بعد.</li>
-                    </ul>
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                    <h4 class="text-base font-bold brand-text-dark mb-4 flex items-center justify-end gap-2"><span>توزيع الحسابات بالميزانية العمومية</span><i class="fas fa-chart-pie text-purple-600"></i></h4>
+                    <div class="relative h-72"><canvas id="expenseChart"></canvas></div>
                 </div>
             </section>
 
+            <!-- خلاصة توازن الميزانية العمومية المتوازنة -->
+            <section class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm text-right">
+                <h4 class="text-base font-bold brand-text-dark mb-4 flex items-center justify-end gap-2">
+                    <span>خلاصة الميزانية العمومية (التوازن المالي الشامل)</span><i class="fas fa-balance-scale brand-text-primary"></i>
+                </h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div class="p-4 bg-purple-50 rounded-lg flex justify-between items-center">
+                        <span id="balance-eq-liab" class="font-bold text-purple-900 text-lg font-mono">0.00 ر.س</span>
+                        <span class="font-medium text-purple-800">:إجمالي الالتزامات + حقوق الملكية</span>
+                    </div>
+                    <div class="p-4 bg-cyan-50 rounded-lg flex justify-between items-center">
+                        <span id="balance-assets" class="font-bold text-cyan-900 text-lg font-mono">0.00 ر.س</span>
+                        <span class="font-medium text-cyan-800">:إجمالي الأصول</span>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
 
-    <!-- مكتبات -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+    <!-- استدعاء المكتبات البرمجية الخارجية اللازمة للرسوم ومعالجة الإكسل -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
-    <!-- JS -->
+    <!-- ربط كود المعالجة ونظام بوابات الدخول -->
     <script src="script.js"></script>
-
 </body>
 </html>
