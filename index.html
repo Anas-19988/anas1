@@ -87,12 +87,34 @@
                 transform: scale(1);
             }
         }
+
+        /* تنسيقات الطباعة الرسمية للتقارير المعتمدة */
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-container {
+                width: 100% !important;
+                max-width: 100% !important;
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800">
 
     <!-- شريط تنبيه عند انقطاع الإنترنت -->
-    <div id="offline-toast" class="hidden fixed bottom-5 right-5 bg-red-600 text-white px-6 py-3 rounded-lg shadow-2xl z-50 flex items-center gap-3 animate-bounce">
+    <div id="offline-toast" class="hidden fixed bottom-5 right-5 bg-red-600 text-white px-6 py-3 rounded-lg shadow-2xl z-50 flex items-center gap-3 animate-bounce no-print">
         <i class="fas fa-wifi-slash"></i>
         <span>أنت تعمل حالياً دون اتصال بالإنترنت. قد لا تعمل بعض الميزات بشكل صحيح.</span>
     </div>
@@ -100,7 +122,7 @@
     <!-- ==================================================== -->
     <!-- القسم الأول: الواجهة التعريفية للمؤسسة (Landing Page) -->
     <!-- ==================================================== -->
-    <div id="landing-page" class="min-h-screen flex flex-col justify-between">
+    <div id="landing-page" class="min-h-screen flex flex-col justify-between no-print">
         <!-- شريط التنقل العلوي -->
         <header class="bg-white shadow-sm px-6 py-4 flex items-center justify-between">
             <div class="flex items-center gap-4">
@@ -179,7 +201,7 @@
     </div>
 
     <!-- نافذة تسجيل الدخول المنبثقة (Login Modal) -->
-    <div id="login-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div id="login-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 no-print">
         <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative animate-fade-in">
             <button id="close-login-btn" class="absolute top-4 left-4 text-slate-400 hover:text-slate-600 text-xl"><i class="fas fa-times"></i></button>
             <div class="text-center space-y-2 mb-6">
@@ -206,7 +228,7 @@
     <!-- ==================================================== -->
     <div id="dashboard-page" class="hidden min-h-screen flex flex-col md:flex-row w-full">
         <!-- القائمة الجانبية المستجيبة -->
-        <aside class="w-full md:w-64 brand-dark text-white p-5 flex flex-col justify-between order-first md:order-last">
+        <aside class="w-full md:w-64 brand-dark text-white p-5 flex flex-col justify-between order-first md:order-last no-print">
             <div>
                 <div class="flex items-center justify-end gap-3 mb-8 px-2">
                     <div class="text-right">
@@ -218,12 +240,13 @@
                     </div>
                 </div>
                 <nav class="space-y-2 text-right">
-                    <a href="#" class="flex items-center justify-end gap-3 px-4 py-3 brand-primary text-white rounded-lg transition-all">
+                    <!-- تم تفعيل أزرار التنقل بين الصفحات هنا -->
+                    <button id="nav-control-panel-btn" onclick="switchMainView('control-panel')" class="w-full flex items-center justify-end gap-3 px-4 py-3 brand-primary text-white rounded-lg transition-all font-bold">
                         <span>لوحة التحكم</span><i class="fas fa-th-large"></i>
-                    </a>
-                    <a href="#" class="flex items-center justify-end gap-3 px-4 py-3 text-slate-400 hover:bg-slate-900 hover:text-white rounded-lg transition-all">
+                    </button>
+                    <button id="nav-reports-btn" onclick="switchMainView('financial-reports')" class="w-full flex items-center justify-end gap-3 px-4 py-3 text-slate-400 hover:bg-slate-900 hover:text-white rounded-lg transition-all font-bold">
                         <span>التقارير المالية</span><i class="fas fa-file-invoice-dollar"></i>
-                    </a>
+                    </button>
                     <button id="logout-btn" class="w-full flex items-center justify-end gap-3 px-4 py-3 text-rose-400 hover:bg-rose-950/30 rounded-lg transition-all mt-6 font-bold">
                         <span>تسجيل الخروج</span><i class="fas fa-sign-out-alt"></i>
                     </button>
@@ -234,8 +257,9 @@
 
         <!-- المحتوى الرئيسي للمنصة المالية -->
         <main class="flex-grow p-6 md:p-10 space-y-6">
-            <!-- هيدر رفع ميزان المراجعة -->
-            <header class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-200 pb-5">
+            
+            <!-- الهيدر الخاص بلوحة التحكم وقراءة الملفات (مخفي عند طباعة التقرير) -->
+            <header id="main-dashboard-header" class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-200 pb-5 no-print">
                 <div class="flex flex-col items-start gap-2 w-full md:w-auto">
                     <!-- ربط الزر مباشرة بحدث التغيير التلقائي لتلافي توقف المزامنة -->
                     <label class="flex items-center gap-2 brand-primary hover:brand-primary-hover text-white px-5 py-2.5 rounded-lg cursor-pointer shadow-md font-bold transition-all text-sm w-full md:w-auto justify-center">
@@ -250,73 +274,235 @@
                 </div>
             </header>
 
-            <!-- صندوق التدقيق والتشخيص التفاعلي والذكي الجديد للمستخدم -->
-            <section id="diagnostic-section" class="bg-slate-900 text-white rounded-xl p-4 border border-slate-800 text-right shadow-inner">
-                <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-3">
-                    <span id="diagnostic-indicator" class="w-3 h-3 rounded-full bg-slate-500"></span>
-                    <h4 class="text-xs font-bold text-slate-400 flex items-center gap-2">
-                        <span>شاشة الفحص والتدقيق المباشر لملف الإكسل</span>
-                        <i class="fas fa-terminal"></i>
+            <!-- ========================================== -->
+            <!-- العرض الأول: صفحة لوحة التحكم (Dashboard View) -->
+            <!-- ========================================== -->
+            <div id="control-panel-view" class="space-y-6">
+                <!-- صندوق التدقيق والتشخيص التفاعلي والذكي الجديد للمستخدم -->
+                <section id="diagnostic-section" class="bg-slate-900 text-white rounded-xl p-4 border border-slate-800 text-right shadow-inner">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-3">
+                        <span id="diagnostic-indicator" class="w-3 h-3 rounded-full bg-slate-500"></span>
+                        <h4 class="text-xs font-bold text-slate-400 flex items-center gap-2">
+                            <span>شاشة الفحص والتدقيق المباشر لملف الإكسل</span>
+                            <i class="fas fa-terminal"></i>
+                        </h4>
+                    </div>
+                    <div id="diagnostic-log" class="text-xs font-mono space-y-1.5 text-slate-300 leading-relaxed max-h-32 overflow-y-auto">
+                        <p class="text-slate-500 italic">انتظار رفع ملف ميزان المراجعة لبدء الفحص والتشخيص المحاسبي...</p>
+                    </div>
+                </section>
+
+                <!-- كروت المؤشرات المالية المستخرجة -->
+                <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 text-right">
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+                        <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center text-xl"><i class="fas fa-wallet"></i></div>
+                        <div>
+                            <p class="text-sm font-medium text-slate-500">إجمالي الإيرادات</p>
+                            <h3 id="total-revenues" class="text-2xl font-bold brand-text-dark mt-1 font-mono">0.00 ر.س</h3>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+                        <div class="w-12 h-12 bg-rose-50 text-rose-600 rounded-full flex items-center justify-center text-xl"><i class="fas fa-receipt"></i></div>
+                        <div>
+                            <p class="text-sm font-medium text-slate-500">إجمالي المصروفات</p>
+                            <h3 id="total-expenses" class="text-2xl font-bold brand-text-dark mt-1 font-mono">0.00 ر.س</h3>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+                        <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center text-xl"><i class="fas fa-scale-balanced"></i></div>
+                        <div>
+                            <p class="text-sm font-medium text-slate-500">صافي الأرباح / الخسائر</p>
+                            <h3 id="net-profit" class="text-2xl font-bold brand-text-dark mt-1 font-mono">0.00 ر.س</h3>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- الرسوم والمخططات البيانية التفاعلية -->
+                <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h4 class="text-base font-bold brand-text-dark mb-4 flex items-center justify-end gap-2"><span>هيكل قائمة الدخل المولد</span><i class="fas fa-chart-bar brand-text-primary"></i></h4>
+                        <div class="relative h-72"><canvas id="revenueChart"></canvas></div>
+                    </div>
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h4 class="text-base font-bold brand-text-dark mb-4 flex items-center justify-end gap-2"><span>توزيع الحسابات بالميزانية العمومية</span><i class="fas fa-chart-pie text-purple-600"></i></h4>
+                        <div class="relative h-72"><canvas id="expenseChart"></canvas></div>
+                    </div>
+                </section>
+
+                <!-- خلاصة توازن الميزانية العمومية المتوازنة -->
+                <section class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm text-right">
+                    <h4 class="text-base font-bold brand-text-dark mb-4 flex items-center justify-end gap-2">
+                        <span>خلاصة الميزانية العمومية (التوازن المالي الشامل)</span><i class="fas fa-balance-scale brand-text-primary"></i>
                     </h4>
-                </div>
-                <div id="diagnostic-log" class="text-xs font-mono space-y-1.5 text-slate-300 leading-relaxed max-h-32 overflow-y-auto">
-                    <p class="text-slate-500 italic">انتظار رفع ملف ميزان المراجعة لبدء الفحص والتشخيص المحاسبي...</p>
-                </div>
-            </section>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div class="p-4 bg-purple-50 rounded-lg flex justify-between items-center">
+                            <span id="balance-eq-liab" class="font-bold text-purple-900 text-lg font-mono">0.00 ر.س</span>
+                            <span class="font-medium text-purple-800">:إجمالي الالتزامات + حقوق الملكية</span>
+                        </div>
+                        <div class="p-4 bg-cyan-50 rounded-lg flex justify-between items-center">
+                            <span id="balance-assets" class="font-bold text-cyan-900 text-lg font-mono">0.00 ر.س</span>
+                            <span class="font-medium text-cyan-800">:إجمالي الأصول</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
 
-            <!-- كروت المؤشرات المالية المستخرجة -->
-            <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 text-right">
-                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
-                    <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center text-xl"><i class="fas fa-wallet"></i></div>
-                    <div>
-                        <p class="text-sm font-medium text-slate-500">إجمالي الإيرادات</p>
-                        <h3 id="total-revenues" class="text-2xl font-bold brand-text-dark mt-1 font-mono">0.00 ر.س</h3>
+            <!-- ========================================== -->
+            <!-- العرض الثاني: صفحة التقارير المالية والطباعة (Reports View) -->
+            <!-- ========================================== -->
+            <div id="financial-reports-view" class="hidden space-y-6">
+                <!-- أزرار التحكم والطباعة الخاصة بالتقارير -->
+                <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-4 rounded-xl border border-slate-200 gap-4 no-print">
+                    <div class="text-right">
+                        <h3 class="text-lg font-bold brand-text-dark">التقارير المالية المعتمدة للطباعة</h3>
+                        <p class="text-xs text-slate-500 mt-1">توليد وعرض جداول قائمة الدخل والميزانية التفصيلية لكافة الحسابات المرفوعة</p>
                     </div>
+                    <button onclick="window.print()" class="bg-brand-primary hover:bg-brand-hover text-white text-xs font-bold px-5 py-3 rounded-lg transition-all flex items-center gap-2 shadow-md">
+                        <i class="fas fa-print"></i> طباعة التقرير المالي الموحد
+                    </button>
                 </div>
-                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
-                    <div class="w-12 h-12 bg-rose-50 text-rose-600 rounded-full flex items-center justify-center text-xl"><i class="fas fa-receipt"></i></div>
-                    <div>
-                        <p class="text-sm font-medium text-slate-500">إجمالي المصروفات</p>
-                        <h3 id="total-expenses" class="text-2xl font-bold brand-text-dark mt-1 font-mono">0.00 ر.س</h3>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
-                    <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center text-xl"><i class="fas fa-scale-balanced"></i></div>
-                    <div>
-                        <p class="text-sm font-medium text-slate-500">صافي الأرباح / الخسائر</p>
-                        <h3 id="net-profit" class="text-2xl font-bold brand-text-dark mt-1 font-mono">0.00 ر.س</h3>
-                    </div>
-                </div>
-            </section>
 
-            <!-- الرسوم والمخططات البيانية التفاعلية -->
-            <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-                    <h4 class="text-base font-bold brand-text-dark mb-4 flex items-center justify-end gap-2"><span>هيكل قائمة الدخل المولد</span><i class="fas fa-chart-bar brand-text-primary"></i></h4>
-                    <div class="relative h-72"><canvas id="revenueChart"></canvas></div>
-                </div>
-                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-                    <h4 class="text-base font-bold brand-text-dark mb-4 flex items-center justify-end gap-2"><span>توزيع الحسابات بالميزانية العمومية</span><i class="fas fa-chart-pie text-purple-600"></i></h4>
-                    <div class="relative h-72"><canvas id="expenseChart"></canvas></div>
-                </div>
-            </section>
+                <!-- وعاء التقرير الرسمي (Print Layout Container) -->
+                <div id="printable-report-container" class="print-container bg-white rounded-2xl border border-slate-200 p-8 md:p-12 shadow-sm max-w-4xl mx-auto space-y-12">
+                    <!-- هيدر رسمي للتقرير للطباعة -->
+                    <div class="border-b-4 border-double border-slate-800 pb-6 flex justify-between items-start text-right">
+                        <div class="text-left text-xs text-slate-500">
+                            <span class="inline-block bg-brand-50 border border-brand-200 text-brand-800 text-[10px] font-bold px-3 py-1 rounded-md mb-2 no-print">
+                                تقرير مدقق معتمد
+                            </span>
+                            <p class="font-semibold text-slate-900">العملة المعتمدة: ريال سعودي (SAR)</p>
+                            <p class="text-[10px] text-slate-400 mt-1">تاريخ التوليد: <span id="report-date-string">--</span></p>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-black text-brand-dark">شركة الأعمال والمؤشرات المهنية النموذجية</h2>
+                            <p class="text-xs text-slate-500 mt-1.5 font-bold">قسم المراجعة والتدقيق الخارجي الختامي الموحد</p>
+                            <p class="text-xs text-slate-400 mt-1">السنة المالية المنتهية في ٣١ ديسمبر ٢٠٢٦م</p>
+                        </div>
+                    </div>
 
-            <!-- خلاصة توازن الميزانية العمومية المتوازنة -->
-            <section class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm text-right">
-                <h4 class="text-base font-bold brand-text-dark mb-4 flex items-center justify-end gap-2">
-                    <span>خلاصة الميزانية العمومية (التوازن المالي الشامل)</span><i class="fas fa-balance-scale brand-text-primary"></i>
-                </h4>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                    <div class="p-4 bg-purple-50 rounded-lg flex justify-between items-center">
-                        <span id="balance-eq-liab" class="font-bold text-purple-900 text-lg font-mono">0.00 ر.س</span>
-                        <span class="font-medium text-purple-800">:إجمالي الالتزامات + حقوق الملكية</span>
+                    <!-- 1. قائمة الدخل التفصيلية (Detailed Income Statement) -->
+                    <div class="space-y-4 text-right">
+                        <div class="text-center mb-6">
+                            <h3 class="text-lg font-bold text-slate-800 underline decoration-brand-600 decoration-2 underline-offset-4">قائمة الدخل الختامية التفصيلية</h3>
+                            <p class="text-xs text-slate-400 mt-1">عن الفترة المالية المنتهية في ٣١ ديسمبر ٢٠٢٦م</p>
+                        </div>
+
+                        <table class="w-full text-right border-collapse text-xs sm:text-sm">
+                            <thead>
+                                <tr class="border-b-2 border-slate-800 text-slate-700 text-xs font-bold">
+                                    <th class="py-2.5 text-slate-900">البند المالي والفرعي</th>
+                                    <th class="py-2.5 text-left w-32">جزئي</th>
+                                    <th class="py-2.5 text-left w-32">إجمالي</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- الإيرادات -->
+                                <tr class="font-bold text-slate-900 bg-slate-50">
+                                    <td class="py-3">المبيعات والإيرادات التشغيلية المكتشفة</td>
+                                    <td></td>
+                                    <td id="rep-rev-total" class="py-3 text-left font-mono text-emerald-600">0.00 ر.س</td>
+                                </tr>
+                                <tr class="text-slate-600 text-xs">
+                                    <td colspan="3" class="p-0">
+                                        <table class="w-full text-right bg-slate-50/20 divide-y divide-slate-100/50">
+                                            <tbody id="rep-rev-list">
+                                                <tr><td class="py-2 pr-8 text-slate-400 italic">لا توجد تفاصيل حسابات إيرادات...</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <!-- المصروفات والعموميات -->
+                                <tr class="font-bold text-slate-900 bg-slate-50 border-t border-slate-200">
+                                    <td class="py-3">يخصم: المصروفات الإدارية والعمومية والتكاليف المباشرة</td>
+                                    <td></td>
+                                    <td id="rep-exp-total" class="py-3 text-left font-mono text-rose-600">0.00 ر.س</td>
+                                </tr>
+                                <tr class="text-slate-600 text-xs">
+                                    <td colspan="3" class="p-0">
+                                        <table class="w-full text-right bg-slate-50/20 divide-y divide-slate-100/50">
+                                            <tbody id="rep-exp-list">
+                                                <tr><td class="py-2 pr-8 text-slate-400 italic">لا توجد تفاصيل حسابات مصروفات...</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <!-- صافي الربح -->
+                                <tr class="font-black text-white bg-brand-dark border-double border-t-4 border-b-4 border-slate-950">
+                                    <td class="py-3.5 pr-2">صافي الربح / (الخسارة) للفترة المحاسبية الحالية</td>
+                                    <td></td>
+                                    <td id="rep-net-income" class="py-3.5 text-left font-mono font-black text-base">0.00 ر.س</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="p-4 bg-cyan-50 rounded-lg flex justify-between items-center">
-                        <span id="balance-assets" class="font-bold text-cyan-900 text-lg font-mono">0.00 ر.س</span>
-                        <span class="font-medium text-cyan-800">:إجمالي الأصول</span>
+
+                    <div class="page-break"></div>
+
+                    <!-- 2. قائمة المركز المالي التفصيلية (Detailed Balance Sheet) -->
+                    <div class="space-y-6 text-right">
+                        <div class="text-center mb-6">
+                            <h3 class="text-lg font-bold text-slate-800 underline decoration-brand-600 decoration-2 underline-offset-4">قائمة المركز المالي الختامية التفصيلية</h3>
+                            <p class="text-xs text-slate-400 mt-1">كما هي في ٣١ ديسمبر ٢٠٢٦م</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 divide-y md:divide-y-0 md:divide-x md:divide-x-reverse divide-slate-300">
+                            <!-- الجانب الأيمن: الأصول (Assets) -->
+                            <div class="space-y-4">
+                                <h4 class="font-bold text-brand-dark border-b-2 border-slate-800 pb-2 text-sm">أولاً: الأصول (الموجودات)</h4>
+                                
+                                <div class="space-y-3">
+                                    <div class="font-semibold text-xs text-slate-400 bg-slate-50 p-1.5 rounded">تفاصيل الأصول المتداولة وغير المتداولة المكتشفة:</div>
+                                    <div class="overflow-x-auto">
+                                        <table class="w-full text-right text-xs">
+                                            <tbody id="rep-assets-list" class="divide-y divide-slate-100 text-slate-600">
+                                                <tr><td class="py-2 text-slate-400 italic">لا توجد تفاصيل أصول...</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="flex justify-between font-black text-sm p-3 bg-brand-50 border-r-4 border-brand-primary rounded mt-2">
+                                        <span>إجمالي أصول المؤسسة</span>
+                                        <span id="rep-assets-total" class="font-mono">0.00 ر.س</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- الجانب الأيسر: الالتزامات وحقوق الملكية (Liabilities & Equity) -->
+                            <div class="space-y-4 md:pr-8">
+                                <h4 class="font-bold text-slate-900 border-b-2 border-slate-800 pb-2 text-sm">ثانياً: الالتزامات وحقوق الملكية</h4>
+                                
+                                <div class="space-y-3">
+                                    <div class="font-semibold text-xs text-slate-400 bg-slate-50 p-1.5 rounded">تفاصيل الخصوم والالتزامات وحقوق المساهمين:</div>
+                                    <div class="overflow-x-auto">
+                                        <table class="w-full text-right text-xs">
+                                            <tbody id="rep-liab-equity-list" class="divide-y divide-slate-100 text-slate-600">
+                                                <tr><td class="py-2 text-slate-400 italic">لا توجد تفاصيل التزامات...</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="flex justify-between font-black text-sm p-3 bg-brand-50 border-r-4 border-slate-800 rounded mt-2">
+                                        <span>إجمالي المطلوبات وحقوق الملكية</span>
+                                        <span id="rep-liab-equity-total" class="font-mono">0.00 ر.س</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- التواقيع الرسمية للتقرير المالي المعتمد -->
+                    <div class="mt-16 pt-8 border-t border-slate-200 grid grid-cols-2 text-center text-xs text-slate-500">
+                        <div>
+                            <p class="font-bold text-slate-800">المحاسب المالي للشركة</p>
+                            <p class="mt-12 text-slate-300">التوقيع / الختم: ________________________</p>
+                        </div>
+                        <div>
+                            <p class="font-bold text-slate-800">المدير التنفيذي والمراجع القانوني</p>
+                            <p class="mt-12 text-slate-300">التوقيع / الختم: ________________________</p>
+                        </div>
                     </div>
                 </div>
-            </section>
+            </div>
         </main>
     </div>
 
@@ -345,6 +531,32 @@
                 console.error("خطأ أثناء التهيئة الأولية للمتصفح:", err);
             }
         });
+
+        // دالة تنقل الصفحات الذكي (لوحة التحكم ضد التقارير الختامية للتصدير)
+        function switchMainView(view) {
+            const controlPanelBtn = document.getElementById('nav-control-panel-btn');
+            const reportsBtn = document.getElementById('nav-reports-btn');
+            const controlPanelView = document.getElementById('control-panel-view');
+            const reportsView = document.getElementById('financial-reports-view');
+
+            if (view === 'control-panel') {
+                // إظهار لوحة المراقبة وإخفاء التقارير التفصيلية
+                controlPanelView.classList.remove('hidden');
+                reportsView.classList.add('hidden');
+
+                // تحديث الـ Active State على القائمة الجانبية
+                controlPanelBtn.className = "w-full flex items-center justify-end gap-3 px-4 py-3 bg-brand-primary text-white rounded-lg transition-all font-bold";
+                reportsBtn.className = "w-full flex items-center justify-end gap-3 px-4 py-3 text-slate-400 hover:bg-slate-900 hover:text-white rounded-lg transition-all font-bold";
+            } else {
+                // إظهار التقارير وإخفاء لوحة التحكم
+                controlPanelView.classList.add('hidden');
+                reportsView.classList.remove('hidden');
+
+                // تحديث الـ Active State على القائمة الجانبية
+                reportsBtn.className = "w-full flex items-center justify-end gap-3 px-4 py-3 bg-brand-primary text-white rounded-lg transition-all font-bold";
+                controlPanelBtn.className = "w-full flex items-center justify-end gap-3 px-4 py-3 text-slate-400 hover:bg-slate-900 hover:text-white rounded-lg transition-all font-bold";
+            }
+        }
 
         // دالة تحديث شاشة التشخيص الذكية المعروضة للمستخدم
         function updateDiagnostic(type, message) {
@@ -625,6 +837,13 @@
             let totalEquity = 0;      
             let processedAccountsCount = 0;
 
+            // تجميع الحسابات المفردة لعرضها في التقارير بالتفصيل
+            let revenueAccounts = [];
+            let expenseAccounts = [];
+            let assetAccounts = [];
+            let liabilityAccounts = [];
+            let equityAccounts = [];
+
             // تمشيط وفرز الحسابات والبيانات من بعد صف العناوين المكتشف
             for (let i = headerRowIdx + 1; i < matrixData.length; i++) {
                 const row = matrixData[i];
@@ -656,34 +875,47 @@
                 // قواعد الفرز والتصنيف الذكية لموازين المراجعة
                 let classified = false;
                 const normalized = accountName.toLowerCase();
+                const netValue = debit - credit;
 
                 if (normalized.includes('إيراد') || normalized.includes('مبيعات') || normalized.includes('revenue') || normalized.includes('sales')) {
-                    totalRevenue += (credit > 0 ? credit : debit); 
+                    const balance = Math.abs(credit > 0 ? credit : debit);
+                    totalRevenue += balance; 
+                    revenueAccounts.push({ name: accountName, amount: balance });
                     classified = true;
                 } 
                 else if (normalized.includes('مصروف') || normalized.includes('رواتب') || normalized.includes('إيجار') || normalized.includes('تكلفة') || normalized.includes('تكاليف') || normalized.includes('استهلاك') || normalized.includes('expenses') || normalized.includes('cost') || normalized.includes('أجور')) {
-                    totalExpenses += debit; 
+                    const balance = Math.abs(netValue);
+                    totalExpenses += balance; 
+                    expenseAccounts.push({ name: accountName, amount: balance });
                     classified = true;
                 }
                 else if (normalized.includes('نقدية') || normalized.includes('صندوق') || normalized.includes('بنك') || normalized.includes('عملاء') || normalized.includes('أصول') || normalized.includes('ثابتة') || normalized.includes('مخزون') || normalized.includes('assets') || normalized.includes('cash') || normalized.includes('bank')) {
-                    totalAssets += (debit - credit); 
+                    totalAssets += netValue; 
+                    assetAccounts.push({ name: accountName, amount: netValue });
                     classified = true;
                 }
                 else if (normalized.includes('موردين') || normalized.includes('قروض') || normalized.includes('التزامات') || normalized.includes('خصوم') || normalized.includes('دائنون') || normalized.includes('liabilities') || normalized.includes('payable')) {
-                    totalLiabilities += (credit - debit); 
+                    const balance = Math.abs(credit - debit);
+                    totalLiabilities += balance; 
+                    liabilityAccounts.push({ name: accountName, amount: balance });
                     classified = true;
                 }
                 else if (normalized.includes('رأس المال') || normalized.includes('ملكية') || normalized.includes('حقوق') || normalized.includes('أرباح مبقاة') || normalized.includes('equity') || normalized.includes('capital')) {
-                    totalEquity += (credit - debit); 
+                    const balance = Math.abs(credit - debit);
+                    totalEquity += balance; 
+                    equityAccounts.push({ name: accountName, amount: balance });
                     classified = true;
                 }
 
                 // معامل التوازن المرن للمطابقة (في حال لم تطابق الكلمات الشائعة)
                 if (!classified) {
                     if (debit > 0) {
-                        totalAssets += (debit - credit);
+                        totalAssets += netValue;
+                        assetAccounts.push({ name: accountName, amount: netValue });
                     } else if (credit > 0) {
-                        totalLiabilities += (credit - debit);
+                        const balance = Math.abs(credit - debit);
+                        totalLiabilities += balance;
+                        liabilityAccounts.push({ name: accountName, amount: balance });
                     }
                 }
                 processedAccountsCount++;
@@ -698,7 +930,14 @@
                 netProfit: netProfit,
                 assets: Math.abs(totalAssets),
                 liabilities: Math.abs(totalLiabilities),
-                equity: finalEquity
+                equity: finalEquity,
+                
+                // حفظ الجداول الفرعية للتوليد داخل التقارير
+                revenueAccounts: revenueAccounts,
+                expenseAccounts: expenseAccounts,
+                assetAccounts: assetAccounts,
+                liabilityAccounts: liabilityAccounts,
+                equityAccounts: equityAccounts
             };
 
             // تخزين محلي آمن في ذاكرة المتصفح
@@ -730,17 +969,131 @@
             const eqLiabEl = document.getElementById('balance-eq-liab');
 
             const formatCurrency = (val) => {
-                return val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                const formatted = val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                return val < 0 ? `-${formatted}` : formatted;
             };
 
             if (revEl) revEl.innerText = formatCurrency(data.totalRev) + ' ر.س';
             if (expEl) expEl.innerText = formatCurrency(data.totalExp) + ' ر.س';
-            if (profEl) profEl.innerText = formatCurrency(data.netProfit) + ' ر.س';
+            if (profEl) {
+                profEl.innerText = formatCurrency(data.netProfit) + ' ر.س';
+                // تغيير اللون والنمط بناء على مكسب أو خسارة
+                if (data.netProfit < 0) {
+                    profEl.className = "text-2xl font-bold text-rose-600 mt-1 font-mono";
+                } else {
+                    profEl.className = "text-2xl font-bold text-emerald-600 mt-1 font-mono";
+                }
+            }
             if (assetEl) assetEl.innerText = formatCurrency(data.assets) + ' ر.س';
             if (eqLiabEl) eqLiabEl.innerText = formatCurrency(data.liabilities + data.equity) + ' ر.س';
+
+            // ملء وعرض تفاصيل جداول التقارير المالية المعتمدة للطباعة
+            updateReportPrintLayout(data);
         }
 
-        // ضخ البيانات الجديدة داخل المخططات الرسومية
+        // تعبئة جداول التقرير المالي المعتمد ديناميكياً
+        function updateReportPrintLayout(data) {
+            document.getElementById('report-date-string').innerText = new Date().toLocaleDateString('ar-SA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+            const formatCurrency = (val) => {
+                const formatted = Math.abs(val).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                return val < 0 ? `(${formatted}) ر.س` : `${formatted} ر.س`;
+            };
+
+            // 1. إيرادات قائمة الدخل
+            document.getElementById('rep-rev-total').innerText = formatCurrency(data.totalRev);
+            const revList = document.getElementById('rep-rev-list');
+            if (data.revenueAccounts && data.revenueAccounts.length > 0) {
+                revList.innerHTML = data.revenueAccounts.map(acc => `
+                    <tr class="hover:bg-slate-50/50">
+                        <td class="py-2 pr-8">${acc.name}</td>
+                        <td class="py-2 text-left font-mono text-slate-500">${formatCurrency(acc.amount)}</td>
+                        <td></td>
+                    </tr>
+                `).join('');
+            } else {
+                revList.innerHTML = '<tr><td class="py-2 pr-8 text-slate-400 italic">لا توجد تفاصيل حسابات إيرادات...</td></tr>';
+            }
+
+            // 2. مصروفات قائمة الدخل
+            document.getElementById('rep-exp-total').innerText = `(${formatCurrency(data.totalExp)})`;
+            const expList = document.getElementById('rep-exp-list');
+            if (data.expenseAccounts && data.expenseAccounts.length > 0) {
+                expList.innerHTML = data.expenseAccounts.map(acc => `
+                    <tr class="hover:bg-slate-50/50">
+                        <td class="py-2 pr-8">${acc.name}</td>
+                        <td class="py-2 text-left font-mono text-slate-500">${formatCurrency(acc.amount)}</td>
+                        <td></td>
+                    </tr>
+                `).join('');
+            } else {
+                expList.innerHTML = '<tr><td class="py-2 pr-8 text-slate-400 italic">لا توجد تفاصيل حسابات مصروفات...</td></tr>';
+            }
+
+            // 3. صافي الدخل الموحد
+            const netIncomeEl = document.getElementById('rep-net-income');
+            netIncomeEl.innerText = formatCurrency(data.netProfit);
+            if (data.netProfit < 0) {
+                netIncomeEl.className = "py-3.5 text-left font-mono font-black text-rose-500 text-base";
+            } else {
+                netIncomeEl.className = "py-3.5 text-left font-mono font-black text-emerald-500 text-base";
+            }
+
+            // 4. أصول الميزانية العمومية
+            document.getElementById('rep-assets-total').innerText = formatCurrency(data.assets);
+            const assetsList = document.getElementById('rep-assets-list');
+            if (data.assetAccounts && data.assetAccounts.length > 0) {
+                assetsList.innerHTML = data.assetAccounts.map(acc => `
+                    <tr class="hover:bg-slate-50/50">
+                        <td class="py-2 font-semibold text-slate-800">${acc.name}</td>
+                        <td class="py-2 text-left font-mono text-slate-500">${formatCurrency(acc.amount)}</td>
+                    </tr>
+                `).join('');
+            } else {
+                assetsList.innerHTML = '<tr><td class="py-2 text-slate-400 italic">لا توجد تفاصيل أصول...</td></tr>';
+            }
+
+            // 5. مطلوبات وحقوق ملكية الميزانية العمومية
+            document.getElementById('rep-liab-equity-total').innerText = formatCurrency(data.liabilities + data.equity);
+            const liabEquityList = document.getElementById('rep-liab-equity-list');
+            let liabEqHTML = '';
+
+            if (data.liabilityAccounts && data.liabilityAccounts.length > 0) {
+                liabEqHTML += '<tr><td colspan="2" class="py-2 font-bold text-slate-900 bg-slate-100/50 pr-2">الخصوم والالتزامات:</td></tr>';
+                liabEqHTML += data.liabilityAccounts.map(acc => `
+                    <tr class="hover:bg-slate-50/50">
+                        <td class="py-2 pr-4 text-slate-600">${acc.name}</td>
+                        <td class="py-2 text-left font-mono text-slate-500">${formatCurrency(acc.amount)}</td>
+                    </tr>
+                `).join('');
+            }
+
+            if (data.equityAccounts && data.equityAccounts.length > 0) {
+                liabEqHTML += '<tr><td colspan="2" class="py-2 font-bold text-slate-900 bg-slate-100/50 pr-2 mt-2">حقوق المساهمين والملكيات:</td></tr>';
+                liabEqHTML += data.equityAccounts.map(acc => `
+                    <tr class="hover:bg-slate-50/50">
+                        <td class="py-2 pr-4 text-slate-600">${acc.name}</td>
+                        <td class="py-2 text-left font-mono text-slate-500">${formatCurrency(acc.amount)}</td>
+                    </tr>
+                `).join('');
+            }
+
+            // ترحيل صافي أرباح/خسائر العام الحالي لضمان التوازن داخل حقوق الملكية
+            liabEqHTML += `
+                <tr class="font-bold text-slate-900 bg-slate-50 border-t border-slate-200">
+                    <td class="py-2 pr-2 text-emerald-600">أرباح (خسائر) العام الحالي المدورة</td>
+                    <td class="py-2 text-left font-mono ${data.netProfit < 0 ? 'text-rose-500' : 'text-emerald-600'}">${formatCurrency(data.netProfit)}</td>
+                </tr>
+            `;
+
+            if (liabEqHTML !== '') {
+                liabEquityList.innerHTML = liabEqHTML;
+            } else {
+                liabEquityList.innerHTML = '<tr><td class="py-2 text-slate-400 italic">لا توجد تفاصيل خصوم وحقوق ملكية...</td></tr>';
+            }
+        }
+
+        // 9. ضخ البيانات الجديدة داخل المخططات الرسومية
         function updateChartsDynamically(summary) {
             if (revenueChartInstance && expenseChartInstance) {
                 revenueChartInstance.data.datasets[0].data = [summary.totalRev, summary.totalExp, summary.netProfit];
