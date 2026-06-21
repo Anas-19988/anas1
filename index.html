@@ -8,27 +8,69 @@
     <!-- خطوط جوجل والأيقونات المعتمدة للهوية المماثلة للصورة -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- مكتبة التنسيق Tailwind CSS المتقدمة -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
+        /* إعدادات الهوية البصرية والخطوط لمنصة مؤشرات للخدمات المهنية */
         body {
-            font-family: 'Cairo', sans-serif !important;
+            font-family: 'Cairo', 'IBM Plex Sans Arabic', sans-serif !important;
         }
-        /* الألوان المعتمدة للهوية البصرية الجديدة */
-        .brand-dark { background-color: #112233; }
-        .brand-text-dark { color: #112233; }
-        .brand-primary { background-color: #2ec4b6; }
-        .brand-primary-hover { background-color: #25a195; }
-        .brand-text-primary { color: #2ec4b6; }
-        .border-brand-primary { border-color: #2ec4b6; }
-        
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+
+        /* تخصيص شريط التمرير المخصص لجداول البيانات المالية الكبيرة */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* فئات الألوان المعتمدة في الهوية المرئية الكحلية والفيروزية */
+        .brand-dark { 
+            background-color: #112233 !important; 
+        }
+        .brand-primary { 
+            background-color: #2ec4b6 !important; 
+        }
+        .brand-primary-hover:hover { 
+            background-color: #25a195 !important; 
+        }
+        .brand-text-dark { 
+            color: #112233 !important; 
+        }
+        .brand-text-primary { 
+            color: #2ec4b6 !important; 
+        }
+        .border-brand-primary { 
+            border-color: #2ec4b6 !important; 
+        }
+
+        /* كلاسات حركية لتأثير النوافذ المنبثقة */
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800">
@@ -36,7 +78,7 @@
     <!-- شريط تنبيه عند انقطاع الإنترنت -->
     <div id="offline-toast" class="hidden fixed bottom-5 right-5 bg-red-600 text-white px-6 py-3 rounded-lg shadow-2xl z-50 flex items-center gap-3 animate-bounce">
         <i class="fas fa-wifi-slash"></i>
-        <span>أنت تعمل حالياً دون اتصال بالإنترنت. قد لا تعمل بعض الميزات بشكل صحيح.</span>
+        <span>أنت تعمل حالياً دون اتصال بالإنترنت. قد لا تعمل بعض الرسوم البيانية بشكل صحيح.</span>
     </div>
 
     <!-- ==================================================== -->
@@ -200,7 +242,7 @@
                         <i class="fas fa-terminal"></i>
                     </h4>
                 </div>
-                <div id="diagnostic-log" class="text-xs font-mono space-y-1.5 text-slate-300 leading-relaxed">
+                <div id="diagnostic-log" class="text-xs font-mono space-y-1.5 text-slate-300 leading-relaxed max-h-32 overflow-y-auto">
                     <p class="text-slate-500 italic">انتظار رفع ملف ميزان المراجعة لبدء الفحص والتشخيص المحاسبي...</p>
                 </div>
             </section>
@@ -265,7 +307,366 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
-    <!-- ربط كود المعالجة ونظام بوابات الدخول -->
-    <script src="script.js"></script>
+    <!-- الأكواد البرمجية التفاعلية الذكية المدمجة لحل مشاكل التوقيت ومزامنة البيانات -->
+    <script>
+        // 1. تنظيف الرابط تلقائياً وحذف علامات الهاش العالقة من الكاش لمنع خطأ الـ 404
+        if (window.location.hash) {
+            window.history.replaceState("", document.title, window.location.pathname);
+        }
+
+        // تشغيل العمليات فور اكتمال بناء واجهة الويب
+        document.addEventListener("DOMContentLoaded", () => {
+            initNetworkMonitor();
+            initCharts();
+            initAuthSystem();
+            checkLoginStatus(); 
+            
+            const uploader = document.getElementById('excel-uploader');
+            if (uploader) {
+                uploader.addEventListener('change', handleFileUpload);
+            }
+        });
+
+        let revenueChartInstance = null;
+        let expenseChartInstance = null;
+
+        // دالة تحديث شاشة التشخيص الذكية المعروضة للمستخدم
+        function updateDiagnostic(type, message) {
+            const logContainer = document.getElementById('diagnostic-log');
+            const indicator = document.getElementById('diagnostic-indicator');
+            if (!logContainer || !indicator) return;
+
+            let icon = "⚙️";
+            let colorClass = "text-slate-300";
+            
+            if (type === "success") {
+                icon = "🟢";
+                colorClass = "text-emerald-400 font-bold";
+                indicator.className = "w-3 h-3 rounded-full bg-emerald-500";
+            } else if (type === "error") {
+                icon = "🔴";
+                colorClass = "text-rose-400 font-bold";
+                indicator.className = "w-3 h-3 rounded-full bg-rose-500 animate-pulse";
+            } else if (type === "warning") {
+                icon = "🟡";
+                colorClass = "text-amber-400";
+                indicator.className = "w-3 h-3 rounded-full bg-amber-500";
+            } else {
+                indicator.className = "w-3 h-3 rounded-full bg-blue-500";
+            }
+
+            logContainer.innerHTML += `<p class="${colorClass}">${icon} ${message}</p>`;
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        // إعادة تصفير شاشة التشخيص لملف جديد
+        function resetDiagnostic() {
+            const logContainer = document.getElementById('diagnostic-log');
+            if (logContainer) logContainer.innerHTML = '';
+        }
+
+        // 2. نظام إدارة بوابات الدخول والتحكم بالتبديل بين الواجهة التعريفية ولوحة التحكم
+        function initAuthSystem() {
+            const openLoginBtn = document.getElementById('open-login-btn');
+            const heroActionBtn = document.getElementById('hero-action-btn');
+            const closeLoginBtn = document.getElementById('close-login-btn');
+            const loginModal = document.getElementById('login-modal');
+            const loginForm = document.getElementById('login-form');
+            const logoutBtn = document.getElementById('logout-btn');
+
+            if (openLoginBtn) openLoginBtn.addEventListener('click', () => loginModal.classList.remove('hidden'));
+            if (heroActionBtn) heroActionBtn.addEventListener('click', () => loginModal.classList.remove('hidden'));
+            if (closeLoginBtn) closeLoginBtn.addEventListener('click', () => loginModal.classList.add('hidden'));
+
+            if (loginForm) {
+                loginForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const user = document.getElementById('username').value.trim().toLowerCase();
+                    const errorEl = document.getElementById('login-error');
+
+                    if (user === 'anas' || user === 'admin') {
+                        localStorage.setItem('isLoggedIn', 'true');
+                        localStorage.setItem('sessionUser', user);
+                        errorEl.classList.add('hidden');
+                        loginModal.classList.add('hidden');
+                        checkLoginStatus();
+                    } else {
+                        errorEl.classList.remove('hidden');
+                    }
+                });
+            }
+
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', () => {
+                    localStorage.removeItem('isLoggedIn');
+                    localStorage.removeItem('sessionUser');
+                    checkLoginStatus();
+                });
+            }
+        }
+
+        function checkLoginStatus() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const landingPage = document.getElementById('landing-page');
+            const dashboardPage = document.getElementById('dashboard-page');
+            const userDisplay = document.getElementById('user-display-name');
+
+            if (isLoggedIn) {
+                if (landingPage) landingPage.classList.add('hidden');
+                if (dashboardPage) dashboardPage.classList.remove('hidden');
+                if (userDisplay) userDisplay.innerText = `مرحباً، ${localStorage.getItem('sessionUser')}`;
+                loadSavedData(); 
+            } else {
+                if (dashboardPage) dashboardPage.classList.add('hidden');
+                if (landingPage) landingPage.classList.remove('hidden');
+            }
+        }
+
+        // 3. مراقبة حالة اتصال المستخدم بالإنترنت
+        function initNetworkMonitor() {
+            const toast = document.getElementById('offline-toast');
+            if (!toast) return;
+            window.addEventListener('offline', () => toast.classList.remove('hidden'));
+            window.addEventListener('online', () => toast.classList.add('hidden'));
+            if (!navigator.onLine) toast.classList.remove('hidden');
+        }
+
+        // 4. تهيئة الرسوم البيانية بهياكل مالية فارغة
+        function initCharts() {
+            const ctxRev = document.getElementById('revenueChart');
+            if (ctxRev) {
+                revenueChartInstance = new Chart(ctxRev.getContext('2d'), {
+                    type: 'bar',
+                    data: { 
+                        labels: ['إجمالي الإيرادات', 'إجمالي المصروفات', 'صافي الربح'], 
+                        datasets: [{ label: 'قائمة الدخل (ر.س)', data: [0, 0, 0], backgroundColor: ['#112233', '#e11d48', '#2ec4b6'] }] 
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            }
+
+            const ctxExp = document.getElementById('expenseChart');
+            if (ctxExp) {
+                expenseChartInstance = new Chart(ctxExp.getContext('2d'), {
+                    type: 'doughnut',
+                    data: { 
+                        labels: ['الأصول', 'الالتزامات', 'حقوق الملكية'], 
+                        datasets: [{ data: [0, 0, 0], backgroundColor: ['#2ec4b6', '#f59e0b', '#112233'] }] 
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            }
+        }
+
+        // 5. قراءة ملف ميزان المراجعة المرفوع
+        function handleFileUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            resetDiagnostic();
+            updateDiagnostic("info", `تم كشف ميزان المراجعة المرفوع: <strong>${file.name}</strong>`);
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                try {
+                    const data = new Uint8Array(event.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    
+                    updateDiagnostic("info", "جاري تمشيط وتحليل هيكلية صفوف ميزان المراجعة...");
+                    
+                    // قراءة كصفوف ومصفوفات ثنائية الأبعاد لضمان التوافق مع موازين المراجعة المتنوعة
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                    
+                    processFinancialData(jsonData);
+                } catch (error) {
+                    updateDiagnostic("error", `حدث عطل أثناء معالجة وقراءة ملف الإكسل: ${error.message}`);
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        // 6. الفرز المالي الشامل المطور بالكامل لتلافي الأخطاء الصامتة والأعمدة الفارغة ومخاطر الصفوف التعريفية الأولى
+        function processFinancialData(matrixData) {
+            if (!matrixData || matrixData.length < 2) {
+                updateDiagnostic("error", "الملف فارغ أو لا يحتوي على صفوف كافية للمعالجة المحاسبية!");
+                return;
+            }
+
+            updateDiagnostic("info", `إجمالي الصفوف المكتشفة في الورقة: (${matrixData.length} صف). جاري تمشيط أول 15 صفاً لتحديد صف عناوين الأعمدة...`);
+
+            // البحث الذكي عن العناوين (Smart Header Detector) للتعرف الآلي على موضع الحساب والمدين والدائن
+            let headerRowIdx = -1;
+            let nameIdx = -1;
+            let debitIdx = -1;
+            let creditIdx = -1;
+
+            for (let r = 0; r < Math.min(matrixData.length, 15); r++) {
+                const row = matrixData[r];
+                if (!row || row.length < 2) continue;
+
+                for (let col = 0; col < row.length; col++) {
+                    const cellText = String(row[col] || '').trim().toLowerCase();
+                    if (nameIdx === -1 && (cellText.includes('اسم') || cellText.includes('حساب') || cellText.includes('account') || cellText.includes('name') || cellText.includes('البيان') || cellText.includes('اسم_الحساب'))) {
+                        nameIdx = col;
+                        headerRowIdx = r;
+                    }
+                    if (debitIdx === -1 && (cellText.includes('مدين') || cellText.includes('debit') || cellText.includes('dr') || cellText.includes('المدين') || cellText.includes('منه'))) {
+                        debitIdx = col;
+                        headerRowIdx = r;
+                    }
+                    if (creditIdx === -1 && (cellText.includes('دائن') || cellText.includes('credit') || cellText.includes('cr') || cellText.includes('الدائن') || cellText.includes('له'))) {
+                        creditIdx = col;
+                        headerRowIdx = r;
+                    }
+                }
+                if (nameIdx !== -1 && debitIdx !== -1 && creditIdx !== -1) {
+                    break; 
+                }
+            }
+
+            // حل بديل ذكي في حال لم تكن العناوين مطابقة تماماً للمسميات الشائعة في البرامج المحاسبية
+            if (nameIdx === -1 || debitIdx === -1 || creditIdx === -1) {
+                updateDiagnostic("warning", "لم يتم كشف عناوين الأعمدة بشكل مباشر. جاري تفعيل القراءة التقريبية للبيانات...");
+                
+                let defaultRowIdx = 0;
+                for (let r = 0; r < Math.min(matrixData.length, 10); r++) {
+                    if (matrixData[r] && matrixData[r].length >= 3) {
+                        defaultRowIdx = r;
+                        break;
+                    }
+                }
+                headerRowIdx = defaultRowIdx;
+                const fallbackRow = matrixData[defaultRowIdx] || [];
+                if (fallbackRow.length >= 4) {
+                    nameIdx = 1;
+                    debitIdx = 2;
+                    creditIdx = 3;
+                } else {
+                    nameIdx = 0;
+                    debitIdx = 1;
+                    creditIdx = 2;
+                }
+            }
+
+            updateDiagnostic("success", `تم العثور على صف العناوين بنجاح في الصف رقم: [${headerRowIdx + 1}]`);
+            updateDiagnostic("info", `تحليل خريطة الفرز المكتشفة: عمود الحساب (${nameIdx + 1}) | عمود المدين (${debitIdx + 1}) | عمود الدائن (${creditIdx + 1})`);
+
+            let totalRevenue = 0;     
+            let totalExpenses = 0;    
+            let totalAssets = 0;      
+            let totalLiabilities = 0; 
+            let totalEquity = 0;      
+            let processedAccountsCount = 0;
+
+            // بدء المعالجة لجميع الحسابات والصفوف من بعد صف العناوين المكتشف
+            for (let i = headerRowIdx + 1; i < matrixData.length; i++) {
+                const row = matrixData[i];
+                if (!row || row.length === 0) continue; 
+
+                // جلب اسم الحساب والأرصدة وتنظيفها
+                const accountName = nameIdx !== -1 && row[nameIdx] ? String(row[nameIdx]).trim() : '';
+                const debit = debitIdx !== -1 && row[debitIdx] !== undefined ? parseFloat(String(row[debitIdx]).replace(/[\s,]/g, '')) || 0 : 0;
+                const credit = creditIdx !== -1 && row[creditIdx] !== undefined ? parseFloat(String(row[creditIdx]).replace(/[\s,]/g, '')) || 0 : 0;
+
+                // تجاهل الأسطر التي لا تحتوي على اسم حساب واضح (مثل خطوط الإجماليات الفرعية)
+                if (!accountName || accountName === "" || accountName.includes('الاجمالي') || accountName.includes('الإجمالي') || accountName.includes('المجموع') || accountName.includes('Total') || accountName.includes('total')) {
+                    continue; 
+                }
+
+                // قواعد فرز وتصنيف الحسابات ديناميكياً
+                let classified = false;
+                if (accountName.includes('إيراد') || accountName.includes('مبيعات') || accountName.includes('Revenue') || accountName.includes('Sales')) {
+                    totalRevenue += (credit > 0 ? credit : debit); 
+                    classified = true;
+                } 
+                else if (accountName.includes('مصروف') || accountName.includes('رواتب') || accountName.includes('إيجار') || accountName.includes('تكلفة') || accountName.includes('تكاليف') || accountName.includes('استهلاك') || accountName.includes('Expenses') || accountName.includes('Cost')) {
+                    totalExpenses += debit; 
+                    classified = true;
+                }
+                else if (accountName.includes('نقدية') || accountName.includes('بنك') || accountName.includes('عملاء') || accountName.includes('أصول') || accountName.includes('ثابتة') || accountName.includes('مخزون') || accountName.includes('Assets') || accountName.includes('Cash')) {
+                    totalAssets += (debit - credit); 
+                    classified = true;
+                }
+                else if (accountName.includes('موردين') || accountName.includes('قروض') || accountName.includes('التزامات') || accountName.includes('خصوم') || accountName.includes('دائنون') || accountName.includes('Liabilities') || accountName.includes('Payable')) {
+                    totalLiabilities += (credit - debit); 
+                    classified = true;
+                }
+                else if (accountName.includes('رأس المال') || accountName.includes('ملكية') || accountName.includes('حقوق') || accountName.includes('أرباح مبقاة') || accountName.includes('Equity') || accountName.includes('Capital')) {
+                    totalEquity += (credit - debit); 
+                    classified = true;
+                }
+
+                // معامل التوازن التلقائي: في حال لم يطابق الحساب أي كلمة، يتم فرزه تلقائياً للحفاظ على توازن الميزانية 100%
+                if (!classified) {
+                    if (debit > 0) {
+                        totalAssets += (debit - credit);
+                    } else if (credit > 0) {
+                        totalLiabilities += (credit - debit);
+                    }
+                }
+                processedAccountsCount++;
+            }
+
+            const netProfit = totalRevenue - totalExpenses;
+            const finalEquity = totalEquity + netProfit;
+
+            const financialSummary = {
+                totalRev: totalRevenue,
+                totalExp: totalExpenses,
+                netProfit: netProfit,
+                assets: Math.abs(totalAssets),
+                liabilities: Math.abs(totalLiabilities),
+                equity: finalEquity
+            };
+
+            localStorage.setItem('financialData', JSON.stringify(financialSummary));
+            
+            // تحديث الواجهة والرسوم البيانية وتفعيل شاشة التشخيص بنجاح
+            updateUI(financialSummary);
+            updateChartsDynamically(financialSummary);
+
+            updateDiagnostic("success", `تمت عملية الفرز والمطابقة بنجاح! تم قراءة معطيات [${processedAccountsCount}] حساب، وتوليد القوائم المتوازنة.`);
+        }
+
+        // جلب وعراض البيانات المحفوظة تلقائياً عند إعادة زيارة الموقع
+        function loadSavedData() {
+            const saved = localStorage.getItem('financialData');
+            if (saved) {
+                const data = JSON.parse(saved);
+                updateUI(data);
+                setTimeout(() => updateChartsDynamically(data), 200);
+            }
+        }
+
+        // تحديث الأرقام والنصوص في الواجهة وتفادي استخدام ترميز الأرقام المتناهية الصغر المربك للمحاسبين
+        function updateUI(data) {
+            const revEl = document.getElementById('total-revenues');
+            const expEl = document.getElementById('total-expenses');
+            const profEl = document.getElementById('net-profit');
+            const assetEl = document.getElementById('balance-assets');
+            const eqLiabEl = document.getElementById('balance-eq-liab');
+
+            // استخدام التنسيق الرقمي العالمي القياسي لتفادي تحويل الأرقام لنقاط مبهمة
+            if (revEl) revEl.innerText = data.totalRev.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ر.س';
+            if (expEl) expEl.innerText = data.totalExp.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ر.س';
+            if (profEl) profEl.innerText = data.netProfit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ر.س';
+            if (assetEl) assetEl.innerText = data.assets.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ر.س';
+            if (eqLiabEl) eqLiabEl.innerText = (data.liabilities + data.equity).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ر.س';
+        }
+
+        // ضخ البيانات الجديدة داخل المخططات الرسومية
+        function updateChartsDynamically(summary) {
+            if (revenueChartInstance && expenseChartInstance) {
+                revenueChartInstance.data.datasets[0].data = [summary.totalRev, summary.totalExp, summary.netProfit];
+                revenueChartInstance.update();
+
+                expenseChartInstance.data.datasets[0].data = [summary.assets, summary.liabilities, summary.equity];
+                expenseChartInstance.update();
+            }
+        }
+    </script>
 </body>
 </html>
